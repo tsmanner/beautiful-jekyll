@@ -39,11 +39,14 @@ DnD.Parsers.Parenthetical = class extends DnD.Parsers.Parser {
   parse(parseString) {
     let match = parseString.match(/^\(/);
     if (match) {
-      parseResult = this.innerParser.parse(parseString.slice(match[0].length));
-      if (parseResult && parseResult.remainder.match(/^\)/)) {
-        return {
-          result: parseResult.result,
-          remainder: result.remainder
+      let parseResult = this.innerParser.parse(parseString.slice(match[0].length));
+      if (parseResult) {
+        match = parseResult.remainder.match(/^\)/);
+        if (match) {
+          return {
+            result: parseResult.result,
+            remainder: parseResult.remainder.slice(match[0].length);
+          }
         }
       }
     }
