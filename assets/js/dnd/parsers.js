@@ -5,6 +5,7 @@ DnD.Parsers.Parser = class {
   constructor() {}
   parse(inString) {
     return {
+      result: {},
       remainder: inString
     }
   }
@@ -23,9 +24,11 @@ DnD.Parsers.AttributeReference = class extends DnD.Parsers.Parser {
       }
     }
     return {
-      id: "",
-      attribute: "",
-      ...super.parse(parseString)
+      ...super.parse(parseString),
+      result: {
+        id: "",
+        attribute: ""
+      }
     }
   }
 }
@@ -36,10 +39,10 @@ DnD.Parsers.Parenthetical = class extends DnD.Parsers.Parser {
   parse(parseString) {
     let match = parseString.match(/^\(/);
     if (match) {
-      result = this.innerParser.parse(parseString.slice(match[0].length));
-      if (result.remainder.match(/^\)/)) {
+      parseResult = this.innerParser.parse(parseString.slice(match[0].length));
+      if (parseResult && parseResult.remainder.match(/^\)/)) {
         return {
-          ...result,
+          result: parseResult.result,
           remainder: result.remainder
         }
       }
