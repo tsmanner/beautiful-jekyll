@@ -1,0 +1,28 @@
+{% assign entity_id = include.entity_prefix | default: "" %}
+{% if entity_id != "" %} {% assign entity_id = entity_id | append: "." %} {% endif %}
+{% assign entity_id = entity_id | append: include.entity.name | replace: ' ', '_' %}
+
+<tr id="{{ entity_id }}"
+  class="entity"
+  data-proficiency="{{ include.entity.proficiency }}"
+  data-hp="{{ include.entity.hp }}"
+  data-ac="{{ include.entity.ac }}"
+  data-str="{{ include.entity.str }}"
+  data-dex="{{ include.entity.dex }}"
+  data-con="{{ include.entity.con }}"
+  data-int="{{ include.entity.int }}"
+  data-wis="{{ include.entity.wis }}"
+  data-cha="{{ include.entity.cha }}">
+  <th><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></th>
+  <td><button id="{{ entity_id }}.initiative" class="initiative input" data-input=":roll"></button></td>
+  <td id="{{ entity_id }}.ac" class="value-reference render-value" data-value-source-attribute="ac"></td>
+  <td><button id="{{ entity_id }}.hp" class="value-range increment decrement" data-value-min="0" data-value-max="{{ include.entity.hp }}" data-decrement="click:(1) click(ctrl):(5)" data-increment="contextmenu:(1) contextmenu(ctrl):(5)" data-value-reference-ids="{{ entity_id }}">
+    <a id="{{ entity_id }}.hp.current" class="value-reference render-value" data-value-source-id="{{ entity_id }}.hp"></a>/<a id="{{ entity_id }}.hp.max" class="value-reference render-value" data-value-source-attribute="hp"></a>
+  </button></td>
+  <td id="{{ entity_id }}.str" class="value-reference render-modifier" data-value-source-attribute="strMod"></td>
+  <td id="{{ entity_id }}.dex" class="value-reference render-modifier" data-value-source-attribute="dexMod"></td>
+  <td id="{{ entity_id }}.con" class="value-reference render-modifier" data-value-source-attribute="conMod"></td>
+  <td id="{{ entity_id }}.int" class="value-reference render-modifier" data-value-source-attribute="intMod"></td>
+  <td id="{{ entity_id }}.wis" class="value-reference render-modifier" data-value-source-attribute="wisMod"></td>
+  <td id="{{ entity_id }}.cha" class="value-reference render-modifier" data-value-source-attribute="chaMod"></td>
+</tr>
