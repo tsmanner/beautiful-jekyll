@@ -45,7 +45,7 @@ DnD.Parsers.Parenthetical = class extends DnD.Parsers.Parser {
         if (match) {
           return {
             result: parseResult.result,
-            remainder: parseResult.remainder.slice(match[0].length);
+            remainder: parseResult.remainder.slice(match[0].length)
           }
         }
       }
