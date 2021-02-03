@@ -59,8 +59,8 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
       }
     }
     let length = results.reduce(function(sum, result) { return sum + parseInt(result.length); }, 0);
-    let fails = results.reduce(function(statuses, result) { return statuses + ((result.status != "ok") ? ", " + result.status : ""); }, "");
-    let status = (fails == "") ? "ok" : fails;
+    let fails = results.reduce(function(statuses, result) { if (result.status != "ok") { statuses.push(result.status); } return statuses; }, []);
+    let status = (fails.length == 0) ? "ok" : fails.join(", ");
     return new DnD.Parsers.Result(this, results, length, status);
   }
 }
