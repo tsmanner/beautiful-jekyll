@@ -38,7 +38,7 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
         let match = s.match(matcher);
         if (match) {
           results.push(new DnD.Parsers.Result(matcher, [match[0]], match[0].length));
-          s = s.slice(result.length);
+          s = s.slice(match[0].length);
         }
         else {
           results.push(new DnD.Parsers.Result(matcher, [], 0, "NoMatch"));
