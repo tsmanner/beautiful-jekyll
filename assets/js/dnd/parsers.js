@@ -51,6 +51,7 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
         }
         else {
           results.push(new DnD.Parsers.Result(matcher, [], 0, "NoMatch("+matcher.source+")"));
+          break;
         }
       }
       else if (matcher instanceof DnD.Parsers.Parser) {
@@ -61,6 +62,7 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
         }
         else {
           results.push(new DnD.Parsers.Result(matcher, [], 0, result.status));
+          break;
         }
       }
       else {
