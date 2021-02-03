@@ -32,7 +32,8 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
   parse(inString) {
     let s = inString;
     let results = [];
-    for (const matcher in this.matchers) {
+    for (const idx in this.matchers) {
+      const matcher = this.matchers[idx];
       if (matcher instanceof RegExp) {
         let match = s.match(matcher);
         if (match) {
