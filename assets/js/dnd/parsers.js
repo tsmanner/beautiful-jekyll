@@ -41,7 +41,7 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
           s = s.slice(match[0].length);
         }
         else {
-          results.push(new DnD.Parsers.Result(matcher, [], 0, "NoMatch"));
+          results.push(new DnD.Parsers.Result(matcher, [], 0, "NoMatch("+matcher.source+")"));
         }
       }
       else if (matcher instanceof DnD.Parsers.Parser) {
