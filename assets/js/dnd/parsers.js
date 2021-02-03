@@ -27,7 +27,16 @@ DnD.Parsers.Parser = class { constructor() {} }
 //   Takes a list of matchers, requiring that they all match, in order
 //
 DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
-  constructor(...matchers) { super(); this.matchers = matchers; }
+  constructor(...matchers) {
+    super();
+    // Force all matcher RegExps to match starting from the beginning of input
+    this.matchers = matchers.map(function (matcher) {
+      if (matcher instanceof RegExp && !matcher.source.startsWith("^")) {
+        return RegExp("^" + matcher.source);
+      }
+      return matcher;
+    });
+  }
 
   parse(inString) {
     let s = inString;
