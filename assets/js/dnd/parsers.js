@@ -27,7 +27,7 @@ DnD.Parsers.Parser = class { constructor() {} }
 //   Takes a list of matchers, requiring that they all match, in order
 //
 DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
-  constructor(...matchers) { this.matchers = matchers; }
+  constructor(...matchers) { super(); this.matchers = matchers; }
 
   parse(inString) {
     let s = inString;
