@@ -37,21 +37,21 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
       if (matcher instanceof RegExp) {
         let match = s.match(matcher);
         if (match) {
-          results.push(DnD.Parsers.Result(matcher, [match[0]], match[0].length));
+          results.push(new DnD.Parsers.Result(matcher, [match[0]], match[0].length));
           s = s.slice(result.length);
         }
         else {
-          results.push(DnD.Parsers.Result(matcher, [], 0, "NoMatch"));
+          results.push(new DnD.Parsers.Result(matcher, [], 0, "NoMatch"));
         }
       }
       else if (matcher instanceof DnD.Parsers.Parser) {
         let result = matcher.parse(s);
         if (result.status == "ok") {
-          results.push(DnD.Parsers.Result(matcher, result.tokens, result.length, "ok"));
+          results.push(new DnD.Parsers.Result(matcher, result.tokens, result.length, "ok"));
           s = s.slice(result.length);
         }
         else {
-          results.push(DnD.Parsers.Result(matcher, [], 0, result.status));
+          results.push(new DnD.Parsers.Result(matcher, [], 0, result.status));
         }
       }
       else {
@@ -61,7 +61,7 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
     let length = results.reduce(function(sum, result) { return sum + parseInt(result.length); }, 0);
     let fails = results.reduce(function(statuses, result) { return statuses + ((result.status != "ok") ? ", " + result.status : ""); }, "");
     let status = (fails == "") ? "ok" : fails;
-    return DnD.Parsers.Result(this, results, length, status);
+    return new DnD.Parsers.Result(this, results, length, status);
   }
 }
 
