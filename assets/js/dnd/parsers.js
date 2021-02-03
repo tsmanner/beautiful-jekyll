@@ -1,55 +1,63 @@
+//
+// Parsers are constructed from a list of matchers
+// Matchers are either a regex or a Parser
+// Effectively, the regexes act as the lexer, and the Parsers compose those tokens into more complex grammars
+// Parser.parse yields a ParseResult which has a list representing the current Parser's child tokens, a status, and a length
+//
+
+
 DnD.Parsers = {}
 
 
-DnD.Parsers.Parser = class {
-  constructor() {}
+DnD.Parsers.Result = class {
+  constructor(matcher, tokens, length, status="ok") {
+    this.matcher = matcher;
+    this.tokens = tokens;
+    this.length = length,
+    this.status = status;
+  }
+}
+
+
+//
+// Sequence Parser
+//   Takes a list of matchers, requiring that they all match, in order
+//
+DnD.Parsers.Sequence = class {
+  constructor(...matchers) { this.matchers = matchers; }
+
   parse(inString) {
-    return {
-      result: {},
-      remainder: inString
-    }
-  }
-}
-
-
-DnD.Parsers.AttributeReference = class extends DnD.Parsers.Parser {
-  constructor() { super(); }
-  parse(parseString) {
-    let match = parseString.match(/^(?<id>[\w\.]*):(?<attribute>[\w\.]*)/);
-    if (match) {
-      return {
-        id: match.groups.id,
-        attribute: match.groups.attribute,
-        ...super.parse(parseString.slice(match[0].length))
-      }
-    }
-    return {
-      ...super.parse(parseString),
-      result: {
-        id: "",
-        attribute: ""
-      }
-    }
-  }
-}
-
-
-DnD.Parsers.Parenthetical = class extends DnD.Parsers.Parser {
-  constructor(innerParser) { super(); this.innerParser = innerParser; }
-  parse(parseString) {
-    let match = parseString.match(/^\(/);
-    if (match) {
-      let parseResult = this.innerParser.parse(parseString.slice(match[0].length));
-      if (parseResult) {
-        match = parseResult.remainder.match(/^\)/);
+    let s = inString;
+    let results = [];
+    for (const matcher in this.matchers) {
+      if (matcher instanceof RegExp) {
+        let match = s.match(matcher);
         if (match) {
-          return {
-            result: parseResult.result,
-            remainder: parseResult.remainder.slice(match[0].length)
-          }
+          results.push(DnD.Parsers.Result(matcher, [match[0]], match[0].length));
+          s = s.slice(result.length);
+        }
+        else {
+          results.push(DnD.Parsers.Result(matcher, [], 0, "NoMatch"));
         }
       }
+      else if (matcher instanceof DnD.Parsers.Parser) {
+        let result = matcher.parse(s);
+        if (result.status == "ok") {
+          results.push(DnD.Parsers.Result(matcher, result.tokens, result.length, "ok"));
+          s = s.slice(result.length);
+        }
+        else {
+          results.push(DnD.Parsers.Result(matcher, [], 0, result.status));
+        }
+      }
+      else {
+        throw "Unrecognized Matcher " + matcher + "!";
+      }
     }
-    return super.parse(parseString);
+    let length = results.reduce(function(sum, result) { return sum + parseInt(result.length); }, 0);
+    let fails = results.reduce(function(statuses, result) { return statuses + ((result.status != "ok") ? ", " + result.status : ""); }, "");
+    let status = (fails == "") ? "ok" : fails;
+    return DnD.Parsers.Result(this, results, length, status);
   }
 }
+
