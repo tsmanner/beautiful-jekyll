@@ -8,7 +8,6 @@ DnD.extractIdAttr = function(ast) {
     let id = ("children" in idOptional && idOptional.children.length == 1) ? idOptional.children[0] : null;
     let attrOptional = ast.children[2].children;
     let attr = ("children" in attrOptional && attrOptional.children.length == 1) ? attrOptional.children[0] : null;
-    console.log(id, attr);
     return { id: id, attr: attr, };
   }
   else {
@@ -36,4 +35,4 @@ DnD.Value = {
 }
 
 
-document.addEventListener('DOMContentLoaded', DnD.Value.initValueReferences);
+DnD.initFunctions.push(DnD.Value.initValueReferences);

@@ -19,10 +19,10 @@
   <td><button id="{{ entity_id }}.hp" class="value-range increment decrement" data-value-min="0" data-value-max="{{ include.entity.hp }}" data-decrement="click:(1) click(ctrl):(5)" data-increment="contextmenu:(1) contextmenu(ctrl):(5)" data-value-reference-ids="{{ entity_id }}">
     <a id="{{ entity_id }}.hp.current" class="value-reference render-value" data-value-source-id="{{ entity_id }}.hp"></a>/<a id="{{ entity_id }}.hp.max" class="value-reference render-value" data-value-source-attribute="hp"></a>
   </button></td>
-  <td id="{{ entity_id }}.str" class="value-reference render-modifier" data-value-source="{{ entity_id }}:str"></td>
-  <td id="{{ entity_id }}.dex" class="value-reference render-modifier" data-value-source="{{ entity_id }}:dex"></td>
-  <td id="{{ entity_id }}.con" class="value-reference render-modifier" data-value-source="{{ entity_id }}:con"></td>
-  <td id="{{ entity_id }}.int" class="value-reference render-modifier" data-value-source="{{ entity_id }}:int"></td>
-  <td id="{{ entity_id }}.wis" class="value-reference render-modifier" data-value-source="{{ entity_id }}:wis"></td>
-  <td id="{{ entity_id }}.cha" class="value-reference render-modifier" data-value-source="{{ entity_id }}:cha"></td>
+  <td id="{{ entity_id }}.str" class="value-reference render-modifier" data-value-source="{{ entity_id }}:strMod"></td>
+  <td id="{{ entity_id }}.dex" class="value-reference render-modifier" data-value-source="{{ entity_id }}:dexMod"></td>
+  <td id="{{ entity_id }}.con" class="value-reference render-modifier" data-value-source="{{ entity_id }}:conMod"></td>
+  <td id="{{ entity_id }}.int" class="value-reference render-modifier" data-value-source="{{ entity_id }}:intMod"></td>
+  <td id="{{ entity_id }}.wis" class="value-reference render-modifier" data-value-source="{{ entity_id }}:wisMod"></td>
+  <td id="{{ entity_id }}.cha" class="value-reference render-modifier" data-value-source="{{ entity_id }}:chaMod"></td>
 </tr>
