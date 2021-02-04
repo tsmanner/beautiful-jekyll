@@ -164,6 +164,7 @@ DnD.Parsers.Optional = class extends DnD.Parsers.Repeat {
     if (superResult.children.length == 1) {
       return new DnD.Parsers.Result(this, superResult.children[0], superResult.length, "ok");
     }
+    return new DnD.Parsers.Result(this, [], 0, "ok");
   }
 
 }
@@ -193,6 +194,7 @@ DnD.Parsers.SepBy = class extends DnD.Parsers.Repeat {
       );
       return new DnD.Parsers.Result(this, flatChildren, superResult.length, "ok");
     }
+    return superResult;
   }
 
 }
