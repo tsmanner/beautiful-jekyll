@@ -150,7 +150,7 @@ DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
       return new DnD.Parsers.Result(this, successes, length, "ok");
     }
     else {
-      return new DnD.Parsers.Result(this, [], 0, "Expected ["+self.min+":"+self.max+"] matches, got "+successes.length);
+      return new DnD.Parsers.Result(this, [], 0, "Expected "+this.min+" to "+this.max+" matches, got "+successes.length);
     }
   }
 }
