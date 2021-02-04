@@ -3,7 +3,6 @@ DnD.Parsers.AttributeName = /[a-zA-Z_]\w*/;
 DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(new DnD.Parsers.Optional(DnD.Parsers.ElementId), /:/, new DnD.Parsers.Optional(DnD.Parsers.AttributeName));
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 DnD.extractIdAttr = function(ast) {
-  console.log("extractIdAttr", ast);
   if (ast.status == "ok") {
     let idOptional = ast.children[0].children;
     let id = ("children" in idOptional && idOptional.children.length == 1) ? idOptional.children[0] : null;
@@ -17,7 +16,6 @@ DnD.extractIdAttr = function(ast) {
   }
 }
 DnD.extractIdAttrs = function(ast) {
-  console.log("extractIdAttrs", ast);
   return ast.children.map(DnD.extractIdAttr);
 }
 
