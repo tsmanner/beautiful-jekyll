@@ -109,7 +109,6 @@ DnD.Parsers.Alternatives = class extends DnD.Parsers.Parser {
     for (const idx in this.matchers) {
       const result = super.match(this.matchers[idx], s);
       results.push(result.result);
-      s = result.s;
     }
     let successes = results.filter(function(result) { return result.status == "ok"; });
     if (successes.length == 1) {
