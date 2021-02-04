@@ -4,9 +4,7 @@ DnD.Entity = {
     if ((attributeName + "Bonuses") in element.dataset) {
       let parser = new DnD.Parsers.SepBy(/ /, DnD.Parsers.AttributeName);
       let bonusesAst = parser.parse(element.dataset[attributeName + "Bonuses"]);
-      console.log(bonusesAst);
       return bonusesAst.children.reduce(function(sum, bonus) {
-        console.log("    "+bonus);
         return sum + parseInt(element.dataset[bonus.children[0]]);
       }, 0);
     }
