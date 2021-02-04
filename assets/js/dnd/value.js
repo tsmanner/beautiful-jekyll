@@ -1,24 +1,31 @@
-let IdAttrParser = new DnD.Parsers.Sequence(/([a-zA-Z_][\w\.]*)?/, /:/, /([a-zA-Z_]\w*)?/);
+DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(/([a-zA-Z_][\w\.]*)?/, /:/, /([a-zA-Z_]\w*)?/);
+DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 
-let ValueSourceParser = new DnD.Parsers.Sequence(
-  IdAttrParser,
-  new DnD.Parsers.Repeat(1, 2,
-    new DnD.Parsers.Sequence(/ /, IdAttrParser),
-  ),
-);
 
-let VSParser = new DnD.Parsers.SepBy(/ /, IdAttrParser);
+DnD.Value = {
 
-// DnD.Values = {
+  initValue: function(element) {
+    if ("source" in element.dataset) {
+      let ast = DnD.Parsers.IdAttr.parse(element.dataset.source);
+      if (ast.status == "ok") {
+        if (ast.length == element.dataset.source.length) {
+          console.log(ast);
+          let sourceId = ast.children[0].children[0];
+          let sourceAttr = ast.children[0].children[2];
+          element.innerHTML = document.getElementById(sourceId).dataset[sourceAttr];
+        }
+        else {
+          throw "Multiple element.dataset.sources '"+element.dataset.source+"'";
+        }
+      }
+      else {
+        throw "Invalid element.dataset.source '"+element.dataset.source+"'";
+      }
+    }
+  },
 
-//   initValue: function(element) {
-//     if ("source" in element.dataset) {
+  initValues: function() {
+    Array.from(document.getElementsByClassName("value")).map(initValue);
+  },
 
-//     }
-//   },
-
-//   initValues: function() {
-//     Array.from(document.getElementsByClassName("value")).map(initValue);
-//   },
-
-// }
+}
