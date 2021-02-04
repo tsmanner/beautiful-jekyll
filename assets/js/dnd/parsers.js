@@ -74,9 +74,7 @@ DnD.Parsers.Parser = class {
 //   Takes a list of matchers, requiring that they all match, in order
 //
 DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
-  constructor(...matchers) {
-    super(...matchers);
-  }
+  constructor(...matchers) { super(...matchers); }
 
   parse(inString) {
     let s = inString;
@@ -86,13 +84,43 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
       results.push(result.result);
       s = result.s;
     }
-    let fails = results.reduce(function(statuses, result) { if (result.status != "ok") { statuses.push(result.status); } return statuses; }, []);
+    let fails = results.filter(function(result) { return result.status != "ok"; });
     if (fails.length == 0) {
       let length = results.reduce(function(sum, result) { return sum + parseInt(result.length); }, 0);
       return new DnD.Parsers.Result(this, results, length, "ok");
     }
     else {
-      return new DnD.Parsers.Result(this, [], 0, fails.join(", "));
+      return new DnD.Parsers.Result(this, [], 0, fails.map(function(result) { return result.status; }).join(", "));
+    }
+  }
+}
+
+
+//
+// Alternatives Parser
+//   Takes a list of matchers, requiring that exactly one match
+//
+DnD.Parsers.Alternatives = class extends DnD.Parsers.Parser {
+  constructor(...matchers) { super(...matchers); }
+
+  parse(inString) {
+    let s = inString;
+    let results = [];
+    for (const idx in this.matchers) {
+      const result = super.match(this.matchers[idx], s);
+      results.push(result.result);
+      s = result.s;
+    }
+    let successes = results.filter(function(result) { return result.status == "ok"; });
+    if (successes.length == 1) {
+      const success = results.filter(function(result) { return result.status == "ok" })[0];
+      return new DnD.Parsers.Result(this, [success], success.length, "ok");
+    }
+    else if (successes.length == 0) {
+      return new DnD.Parsers.Result(this, [], 0, "NoAlternatives");
+    }
+    else {
+      return new DnD.Parsers.Result(this, [], 0, "MultipleAlternatives("+successes.map(function(result) { return result.matcher; }).join(", ")+")");
     }
   }
 }
