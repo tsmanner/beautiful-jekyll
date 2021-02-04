@@ -78,3 +78,5 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
   }
 }
 
+
+let IdAttrParser = new DnD.Parsers.Sequence(/\w+/, /:/, /\w+/);
