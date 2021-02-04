@@ -1,13 +1,16 @@
 DnD.Entity = {
 
   getBonuses: function(element, attributeName) {
-    let total = 0;
     if ((attributeName + "Bonuses") in element.dataset) {
       let parser = new DnD.Parsers.SepBy(/ /, DnD.Parsers.AttributeName);
-      let bonusesAst = parser.parse(element.dataset[attributeName + "Bonuses"])
-      let total = bonusesAst.children.reduce(function(sum, bonus) { return sum + parseInt(entity.dataset[bonus.children[0]]); });
+      let bonusesAst = parser.parse(element.dataset[attributeName + "Bonuses"]);
+      console.log(bonusesAst);
+      return bonusesAst.children.reduce(function(sum, bonus) {
+        console.log("    "+bonus);
+        return sum + parseInt(element.dataset[bonus.children[0]]);
+      }, 0);
     }
-    return total;
+    return 0;
   },
 
   initEntity: function(element) {
