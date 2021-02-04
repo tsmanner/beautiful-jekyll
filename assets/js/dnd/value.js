@@ -7,11 +7,12 @@ DnD.Value = {
   initValue: function(element) {
     if ("source" in element.dataset) {
       let ast = DnD.Parsers.IdAttr.parse(element.dataset.source);
+      console.log(ast);
       if (ast.status == "ok") {
         if (ast.length == element.dataset.source.length) {
-          console.log(ast);
           let sourceId = ast.children[0].children[0];
           let sourceAttr = ast.children[0].children[2];
+          console.log(sourceId, sourceAttr);
           element.innerHTML = document.getElementById(sourceId).dataset[sourceAttr];
         }
         else {
