@@ -18,7 +18,7 @@ DnD.extractIdAttr = function(ast) {
 }
 DnD.extractIdAttrs = function(ast) {
   console.log("extractIdAttrs", ast);
-  return ast.children.map(extractIdAttr);
+  return ast.children.map(DnD.extractIdAttr);
 }
 
 
