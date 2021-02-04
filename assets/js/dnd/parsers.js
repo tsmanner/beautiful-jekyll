@@ -129,7 +129,7 @@ DnD.Parsers.Alternatives = class extends DnD.Parsers.Parser {
 //   Takes a matcher and a range of match counts, greedily expecting between min and max total matches.
 //
 DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
-  constructor(matcher, min, max) { super(matcher); this.min = min; this.max = max; }
+  constructor(min, max, matcher) { super(matcher); this.min = min; this.max = max; }
 
   parse(inString) {
     let s = inString;
