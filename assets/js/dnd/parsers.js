@@ -155,3 +155,39 @@ DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
   }
 }
 
+
+DnD.Parsers.Optional = class extends DnD.Parsers.Repeat {
+  constructor(matcher) { super(0, 1, matcher); }
+}
+
+
+DnD.Parsers.Many = class extends DnD.Parsers.Repeat {
+  constructor(matcher) { super(0, Number.MAX_SAFE_INTEGER, matcher); }
+}
+
+
+DnD.Parsers.Many1 = class extends DnD.Parsers.Repeat {
+  constructor(matcher) { super(1, Number.MAX_SAFE_INTEGER, matcher); }
+}
+
+
+DnD.Parsers.SepBy = class extends DnD.Parsers.Repeat {
+  constructor(sep, matcher) { super(1, Number.MAX_SAFE_INTEGER, new DnD.Parsers.Sequence(matcher, new DnD.Parsers.Many(new DnD.Parsers.Sequence(sep, matcher)))); this.sep = sep; this.matcher = matcher; }
+
+  parse(inString) {
+    let result = [];
+    let superResult = super.parse(inString);
+    if (superResult.status == "ok") {
+      let flatChildren = superResult.children[1].reduce(
+        function(children, res) {
+          children.push(res.children[1])
+          return children
+        }, [superResult.children[0]]
+      );
+      return new DnD.Parsers.Result(this, flatChildren, superResult.length, "ok");
+    }
+  }
+
+}
+
+

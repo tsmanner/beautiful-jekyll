@@ -7,6 +7,7 @@ let ValueSourceParser = new DnD.Parsers.Sequence(
   ),
 );
 
+let VSParser = new DnD.Parsers.SepBy(/ /, IdAttrParser);
 
 // DnD.Values = {
 
