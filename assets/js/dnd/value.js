@@ -12,7 +12,7 @@ DnD.Value = {
         if (ast.length == element.dataset.source.length) {
           let sourceId = ast.children[0].children[0];
           let sourceAttr = ast.children[0].children[2];
-          console.log(sourceId, sourceAttr);
+          console.log(ast.children[0].children, sourceId, sourceAttr);
           element.innerHTML = document.getElementById(sourceId).dataset[sourceAttr];
         }
         else {
