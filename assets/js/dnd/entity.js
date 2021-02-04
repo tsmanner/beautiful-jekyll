@@ -14,7 +14,7 @@ DnD.Entity = {
     // update(element);
   },
 
-  initEntities: function() { document.getElementsByClassName("entity").map(DnD.Entity.initEntity); },
+  initEntities: function() { Array.from(document.getElementsByClassName("entity")).map(DnD.Entity.initEntity); },
 
 }
 
