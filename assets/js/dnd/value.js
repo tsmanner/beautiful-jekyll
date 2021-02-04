@@ -25,7 +25,10 @@ DnD.Value = {
   },
 
   initValues: function() {
-    Array.from(document.getElementsByClassName("value")).map(initValue);
+    Array.from(document.getElementsByClassName("value")).map(DnD.Value.initValue);
   },
 
 }
+
+
+document.addEventListener('DOMContentLoaded', DnD.Value.initValues);
