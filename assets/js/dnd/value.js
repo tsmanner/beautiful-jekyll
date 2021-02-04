@@ -2,30 +2,34 @@ DnD.Parsers.ElementId = /[a-zA-Z_][\w\.]*/;
 DnD.Parsers.AttributeName = /[a-zA-Z_]\w*/;
 DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(new DnD.Parsers.Optional(DnD.Parsers.ElementId), /:/, new DnD.Parsers.Optional(DnD.Parsers.AttributeName));
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
+DnD.extractIdAttr = function(ast) {
+  console.log("extractIdAttr", ast);
+  if (ast.status == "ok") {
+    let idOptional = ast.children[0].children;
+    let id = ("children" in idOptional && idOptional.children.length == 1) ? idOptional.children[0] : null;
+    let attrOptional = ast.children[2].children;
+    let attr = ("children" in attrOptional && attrOptional.children.length == 1) ? attrOptional.children[0] : null;
+    console.log(id, attr);
+    return { id: id, attr: attr, };
+  }
+  else {
+    throw "Invalid IdAttr '"+inString+"'";
+  }
+}
+DnD.extractIdAttrs = function(ast) {
+  console.log("extractIdAttrs", ast);
+  return ast.children.map(extractIdAttr);
+}
 
 
 DnD.Value = {
 
   initValueReference: function(element) {
     if ("valueSource" in element.dataset) {
-      let ast = DnD.Parsers.IdAttr.parse(element.dataset.valueSource);
-      console.log(ast);
-      if (ast.status == "ok") {
-        if (ast.length == element.dataset.valueSource.length) {
-          let sourceIdOptional = ast.children[0].children;
-          let sourceId = ("children" in sourceIdOptional && sourceIdOptional.children.length == 1) ? sourceIdOptional.children[0] : "foo";
-          let sourceAttrOptional = ast.children[2].children;
-          let sourceAttr = ("children" in sourceAttrOptional && sourceAttrOptional.children.length == 1) ? sourceAttrOptional.children[0] : "foo";
-          console.log(sourceId, sourceAttr);
-          element.innerHTML = document.getElementById(sourceId).dataset[sourceAttr];
-        }
-        else {
-          throw "Multiple element.dataset.sources '"+element.dataset.valueSource+"'";
-        }
-      }
-      else {
-        throw "Invalid element.dataset.valueSource '"+element.dataset.valueSource+"'";
-      }
+      let source = DnD.extractIdAttr(DnD.Parsers.IdAttr.parse(element.dataset.valueSource));
+      if (source.id == null) { source.id = element.id; }
+      if (source.attr == null) { source.attr = "value"; }
+      element.innerHTML = document.getElementById(source.id).dataset[source.attr];
     }
   },
 
