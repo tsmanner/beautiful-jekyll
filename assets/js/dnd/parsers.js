@@ -46,11 +46,11 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
       if (matcher instanceof RegExp) {
         let match = s.match(matcher);
         if (match) {
-          results.push(new DnD.Parsers.Result(matcher, [match[0]], match[0].length, "ok"));
+          results.push(new DnD.Parsers.Result(matcher, match[0], match[0].length, "ok"));
           s = s.slice(match[0].length);
         }
         else {
-          results.push(new DnD.Parsers.Result(matcher, [], 0, "NoMatch("+matcher.source+")"));
+          results.push(new DnD.Parsers.Result(matcher, "", 0, "NoMatch("+matcher.source+")"));
         }
       }
       else if (matcher instanceof DnD.Parsers.Parser) {
