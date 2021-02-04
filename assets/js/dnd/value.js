@@ -1,6 +1,6 @@
 DnD.Parsers.ElementId = /[a-zA-Z_][\w\.]*/;
 DnD.Parsers.AttributeName = /[a-zA-Z_]\w*/;
-DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(new DnD.Parsers.Optional(Dnd.Parsers.ElementId), /:/, new DnD.Parsers.Optional(DnD.Parsers.AttributeName));
+DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(new DnD.Parsers.Optional(DnD.Parsers.ElementId), /:/, new DnD.Parsers.Optional(DnD.Parsers.AttributeName));
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 
 
