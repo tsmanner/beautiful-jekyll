@@ -135,10 +135,9 @@ DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
     let s = inString;
     let successes = [];
     const matcher = this.matchers[0];
-    for (let i = 0; i < parseInt(this.max); ++i) {
+    for (let i = 0; i < this.max; ++i) {
       const result = super.match(matcher, s);
-      console.log(result);
-      if (result.status == "ok") {
+      if (result.result.status == "ok") {
         successes.push(result.result);
         s = result.s;
       }
@@ -146,8 +145,7 @@ DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
         break;
       }
     }
-    console.log(successes.length, this.min, successes.length >= this.min);
-    if (successes.length >= parseInt(this.min)) {
+    if (successes.length >= this.min) {
       let length = successes.reduce(function(sum, result) { return sum + parseInt(result.length); }, 0);
       return new DnD.Parsers.Result(this, successes, length, "ok");
     }
