@@ -1,4 +1,6 @@
-DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(/([a-zA-Z_][\w\.]*)?/, /:/, /([a-zA-Z_]\w*)?/);
+DnD.Parsers.ElementId = /[a-zA-Z_][\w\.]*/;
+DnD.Parsers.AttributeName = /[a-zA-Z_]\w*/;
+DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(new DnD.Parsers.Optional(Dnd.Parsers.ElementId), /:/, new DnD.Parsers.Optional(DnD.Parsers.AttributeName));
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 
 
@@ -25,11 +27,9 @@ DnD.Value = {
     }
   },
 
-  initValues: function() {
-    Array.from(document.getElementsByClassName("value-reference")).map(DnD.Value.initValueReference);
-  },
+  initValueReferences: function() { Array.from(document.getElementsByClassName("value-reference")).map(DnD.Value.initValueReference); },
 
 }
 
 
-document.addEventListener('DOMContentLoaded', DnD.Value.initValues);
+document.addEventListener('DOMContentLoaded', DnD.Value.initValueReferences);

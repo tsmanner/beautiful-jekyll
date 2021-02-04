@@ -158,6 +158,14 @@ DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
 
 DnD.Parsers.Optional = class extends DnD.Parsers.Repeat {
   constructor(matcher) { super(0, 1, matcher); }
+
+  parse(inString) {
+    let superResult = super.parse(inString);
+    if (superResult.children.length == 1) {
+      return new DnD.Parsers.Result(this, superResult.children[0], superResult.length, "ok");
+    }
+  }
+
 }
 
 
