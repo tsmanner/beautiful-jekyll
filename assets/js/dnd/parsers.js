@@ -186,11 +186,11 @@ DnD.Parsers.SepBy = class extends DnD.Parsers.Repeat {
   parse(inString) {
     let superResult = super.parse(inString);
     if (superResult.status == "ok") {
-      let flatChildren = superResult.children[1].children.reduce(
+      let flatChildren = superResult.children[0].children.slice(1).reduce(
         function(children, res) {
-          children.push(res.children[1])
+          children.push(res.children[0].children[1]);
           return children
-        }, [superResult.children[0]]
+        }, [superResult.children[0].children[0]]
       );
       return new DnD.Parsers.Result(this, flatChildren, superResult.length, "ok");
     }
