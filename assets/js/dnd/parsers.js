@@ -20,7 +20,15 @@ DnD.Parsers.Result = class {
 
 
 DnD.Parsers.Parser = class {
-  constructor() {}
+  constructor(...matchers) {
+    // Force all matcher RegExps to match starting from the beginning of input
+    this.matchers = matchers.map(function (matcher) {
+      if (matcher instanceof RegExp && !matcher.source.startsWith("^")) {
+        return RegExp("^" + matcher.source);
+      }
+      return matcher;
+    });
+  }
 
   match(matcher, s) {
     if (matcher instanceof RegExp) {
@@ -67,14 +75,7 @@ DnD.Parsers.Parser = class {
 //
 DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
   constructor(...matchers) {
-    super();
-    // Force all matcher RegExps to match starting from the beginning of input
-    this.matchers = matchers.map(function (matcher) {
-      if (matcher instanceof RegExp && !matcher.source.startsWith("^")) {
-        return RegExp("^" + matcher.source);
-      }
-      return matcher;
-    });
+    super(...matchers);
   }
 
   parse(inString) {
