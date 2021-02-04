@@ -13,9 +13,7 @@
   data-int="{{ include.entity.int }}"
   data-wis="{{ include.entity.wis }}"
   data-cha="{{ include.entity.cha }}"
-  {%- for bonus in include.entity.bonuses -%}
-    data-{{ bonus[0] }}-bonus="{{ bonus[1] }}"
-  {%- endfor -%}>
+  {%- for bonus in include.entity.bonuses -%} data-{{ bonus[0] }}-bonus="{{ bonus[1] }}" {%- endfor -%}>
   <th><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></th>
   <td><button id="{{ entity_id }}.initiative" class="initiative input" data-input=":roll"></button></td>
   <td id="{{ entity_id }}.ac" class="value-reference render-value" data-value-source-attribute="ac"></td>
