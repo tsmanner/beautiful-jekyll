@@ -175,10 +175,10 @@ DnD.Parsers.SepBy = class extends DnD.Parsers.Repeat {
   constructor(sep, matcher) { super(1, Number.MAX_SAFE_INTEGER, new DnD.Parsers.Sequence(matcher, new DnD.Parsers.Many(new DnD.Parsers.Sequence(sep, matcher)))); this.sep = sep; this.matcher = matcher; }
 
   parse(inString) {
-    let result = [];
     let superResult = super.parse(inString);
     if (superResult.status == "ok") {
-      let flatChildren = superResult.children[1].reduce(
+      console.log(superResult);
+      let flatChildren = superResult.children[1].children.reduce(
         function(children, res) {
           children.push(res.children[1])
           return children
