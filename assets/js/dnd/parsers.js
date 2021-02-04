@@ -81,8 +81,7 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
     let s = inString;
     let results = [];
     for (const idx in this.matchers) {
-      const matcher = this.matchers[idx];
-      result = super.match(matcher, s);
+      const result = super.match(this.matchers[idx], s);
       results.push(result.result);
       s = result.s;
     }
