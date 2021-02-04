@@ -19,7 +19,46 @@ DnD.Parsers.Result = class {
 }
 
 
-DnD.Parsers.Parser = class { constructor() {} }
+DnD.Parsers.Parser = class {
+  constructor() {}
+
+  match(matcher, s) {
+    if (matcher instanceof RegExp) {
+      let match = s.match(matcher);
+      if (match) {
+        return {
+          result: new DnD.Parsers.Result(matcher, [match[0]], match[0].length, "ok"),
+          s: s.slice(match[0].length),
+        };
+      }
+      else {
+        return {
+          result: new DnD.Parsers.Result(matcher, [], 0, "NoMatch("+matcher.source+")"),
+          s: s,
+        };
+      }
+    }
+    else if (matcher instanceof DnD.Parsers.Parser) {
+      let result = matcher.parse(s);
+      if (result.status == "ok") {
+        return {
+          result: new DnD.Parsers.Result(matcher, result.children, result.length, "ok"),
+          s: s.slice(result.length),
+        };
+      }
+      else {
+        return {
+          result: new DnD.Parsers.Result(matcher, [], 0, result.status),
+          s: s,
+        };
+      }
+    }
+    else {
+      throw "Unrecognized Matcher " + matcher + "!";
+    }
+  }
+
+}
 
 
 //
@@ -43,29 +82,9 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
     let results = [];
     for (const idx in this.matchers) {
       const matcher = this.matchers[idx];
-      if (matcher instanceof RegExp) {
-        let match = s.match(matcher);
-        if (match) {
-          results.push(new DnD.Parsers.Result(matcher, [match[0]], match[0].length, "ok"));
-          s = s.slice(match[0].length);
-        }
-        else {
-          results.push(new DnD.Parsers.Result(matcher, [], 0, "NoMatch("+matcher.source+")"));
-        }
-      }
-      else if (matcher instanceof DnD.Parsers.Parser) {
-        let result = matcher.parse(s);
-        if (result.status == "ok") {
-          results.push(new DnD.Parsers.Result(matcher, result.children, result.length, "ok"));
-          s = s.slice(result.length);
-        }
-        else {
-          results.push(new DnD.Parsers.Result(matcher, [], 0, result.status));
-        }
-      }
-      else {
-        throw "Unrecognized Matcher " + matcher + "!";
-      }
+      result = super.match(matcher, s);
+      results.push(result.result);
+      s = result.s;
     }
     let fails = results.reduce(function(statuses, result) { if (result.status != "ok") { statuses.push(result.status); } return statuses; }, []);
     if (fails.length == 0) {
