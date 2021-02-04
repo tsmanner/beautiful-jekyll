@@ -13,7 +13,7 @@ DnD.Parsers.Result = class {
   constructor(matcher, children, length, status) {
     this.matcher = matcher;
     this.children = children;
-    this.length = length,
+    this.length = length;
     this.status = status;
   }
 }
@@ -79,8 +79,8 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
   parse(inString) {
     let s = inString;
     let results = [];
-    for (const idx in this.matchers) {
-      const result = super.match(this.matchers[idx], s);
+    for (const matcher of this.matchers) {
+      const result = super.match(matcher, s);
       results.push(result.result);
       s = result.s;
     }
@@ -104,10 +104,9 @@ DnD.Parsers.Alternatives = class extends DnD.Parsers.Parser {
   constructor(...matchers) { super(...matchers); }
 
   parse(inString) {
-    let s = inString;
     let results = [];
-    for (const idx in this.matchers) {
-      const result = super.match(this.matchers[idx], s);
+    for (const matcher of this.matchers) {
+      const result = super.match(matcher, inString);
       results.push(result.result);
     }
     let successes = results.filter(function(result) { return result.status == "ok"; });
@@ -125,4 +124,34 @@ DnD.Parsers.Alternatives = class extends DnD.Parsers.Parser {
 }
 
 
-let IdAttrParser = new DnD.Parsers.Sequence(/([a-zA-Z_][\w\.]*)?/, /:/, /([a-zA-Z_]\w*)?/);
+//
+// Repeat Parser
+//   Takes a matcher and a range of match counts, greedily expecting between min and max total matches.
+//
+DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
+  constructor(matcher, min, max) { super(matcher); this.min = min; this.max = max; }
+
+  parse(inString) {
+    let s = inString;
+    let successes = [];
+    const matcher = this.matchers[0];
+    for (let i = 0; i < this.max; ++i) {
+      const result = super.match(matcher, s);
+      if (result.status == "ok") {
+        successes.push(result.result);
+        s = result.s;
+      }
+      else {
+        break;
+      }
+    }
+    if (successes.length >= this.min) {
+      let length = successes.reduce(function(sum, result) { return sum + parseInt(result.length); }, 0);
+      return new DnD.Parsers.Result(this, successes, length, "ok");
+    }
+    else {
+      return new DnD.Parsers.Result(this, [], 0, "Expected ["+self.min+":"+self.max+"] matches, got "+successes.length);
+    }
+  }
+}
+
