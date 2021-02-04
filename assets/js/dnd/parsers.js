@@ -10,9 +10,9 @@ DnD.Parsers = {}
 
 
 DnD.Parsers.Result = class {
-  constructor(matcher, tokens, length, status) {
+  constructor(matcher, children, length, status) {
     this.matcher = matcher;
-    this.tokens = tokens;
+    this.children = children;
     this.length = length,
     this.status = status;
   }
@@ -56,7 +56,7 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
       else if (matcher instanceof DnD.Parsers.Parser) {
         let result = matcher.parse(s);
         if (result.status == "ok") {
-          results.push(new DnD.Parsers.Result(matcher, result.tokens, result.length, "ok"));
+          results.push(new DnD.Parsers.Result(matcher, result.children, result.length, "ok"));
           s = s.slice(result.length);
         }
         else {
