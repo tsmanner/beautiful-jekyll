@@ -137,6 +137,7 @@ DnD.Parsers.Repeat = class extends DnD.Parsers.Parser {
     const matcher = this.matchers[0];
     for (let i = 0; i < this.max; ++i) {
       const result = super.match(matcher, s);
+      console.log(result);
       if (result.status == "ok") {
         successes.push(result.result);
         s = result.s;
