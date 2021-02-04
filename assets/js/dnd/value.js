@@ -2,7 +2,7 @@ let IdAttrParser = new DnD.Parsers.Sequence(/([a-zA-Z_][\w\.]*)?/, /:/, /([a-zA-
 
 let ValueSourceParser = new DnD.Parsers.Sequence(
   IdAttrParser,
-  /" "/,
+  / /,
   new DnD.Parsers.Repeat(IdAttrParser, 0, 1),
 );
 
