@@ -11,8 +11,8 @@ DnD.Value = {
       if (ast.status == "ok") {
         if (ast.length == element.dataset.source.length) {
           let sourceId = ast.children[0].children[0];
-          let sourceAttr = ast.children[0].children[2];
-          console.log(ast.children[0].children, sourceId, sourceAttr);
+          let sourceAttr = ast.children[2].children[0];
+          console.log(sourceId, sourceAttr);
           element.innerHTML = document.getElementById(sourceId).dataset[sourceAttr];
         }
         else {
