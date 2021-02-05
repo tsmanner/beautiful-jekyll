@@ -180,21 +180,21 @@ DnD.Parsers.Many1 = class extends DnD.Parsers.Repeat {
 }
 
 
-DnD.Parsers.SepBy = class extends DnD.Parsers.Repeat {
-  constructor(sep, matcher) { super(1, Number.MAX_SAFE_INTEGER, new DnD.Parsers.Sequence(matcher, new DnD.Parsers.Many(new DnD.Parsers.Sequence(sep, matcher)))); this.sep = sep; this.matcher = matcher; }
+DnD.Parsers.SepBy = class extends DnD.Parsers.Parser {
+  constructor(sep, matcher) { super(new DnD.Parsers.Sequence(matcher, new DnD.Parsers.Many(new DnD.Parsers.Sequence(sep, matcher)))); this.sep = sep; this.matcher = matcher; }
 
   parse(inString) {
-    let superResult = super.parse(inString);
-    if (superResult.status == "ok") {
-      let flatChildren = superResult.children[0].children[1].children.reduce(
+    let sequenceResult = this.matchers[0].parse(inString);
+    if (sequenceResult.status == "ok") {
+      let flatChildren = sequenceResult.children[1].children.reduce(
         function(children, res) {
-          children.push(res.children[0].children[1]);
+          children.push(res.children[1].children[0]);
           return children
-        }, [superResult.children[0].children[0]]
+        }, [sequenceResult.children[0].children[0]]
       );
-      return new DnD.Parsers.Result(this, flatChildren, superResult.length, "ok");
+      return new DnD.Parsers.Result(this, flatChildren, sequenceResult.length, "ok");
     }
-    return superResult;
+    return sequenceResult;
   }
 
 }
