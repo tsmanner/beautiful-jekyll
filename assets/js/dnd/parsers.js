@@ -219,10 +219,10 @@ DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 DnD.Parsers.ValueOrIdAttr = new DnD.Parsers.Alternatives(DnD.Parsers.IdAttr, /\d+/);
 DnD.Parsers.extractIdAttr = function(ast) {
   if (ast.status == "ok") {
-    let idOptional = ast.children[0].children;
-    let id = ("children" in idOptional && idOptional.children.length == 1) ? idOptional.children[0] : null;
-    let attrOptional = ast.children[2].children;
-    let attr = ("children" in attrOptional && attrOptional.children.length == 1) ? attrOptional.children[0] : null;
+    let idOptional = ast.children[0];
+    let id = ("children" in idOptional && idOptional.children.length == 1) ? idOptional.children[0].children[0] : null;
+    let attrOptional = ast.children[2];
+    let attr = ("children" in attrOptional && attrOptional.children.length == 1) ? attrOptional.children[0].children[0] : null;
     return { id: id, attr: attr, };
   }
   else {
