@@ -19,7 +19,7 @@
   <th><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></th>
   <td><button id="{{ entity_id }}.initiative" class="value" data-value="{{ entity_id }}:initiative"></button></td>
   <td id="{{ entity_id }}.ac" class="value render-value" data-value="{{ entity_id }}:ac"></td>
-  <td><button id="{{ entity_id }}.hp" class="value-range increment decrement" data-value-min="0" data-value-max="{{ entity_id }}:hp" data-decrement="click:(1) click(ctrl):(5)" data-increment="contextmenu:(1) contextmenu(ctrl):(5)" data-value-ids="{{ entity_id }}">
+  <td><button id="{{ entity_id }}.hp" class="value value-range increment decrement" data-value="{{ include.entity.hp }}" data-value-min="0" data-value-max="{{ entity_id }}:hp" data-decrement="click:(1) click(ctrl):(5)" data-increment="contextmenu:(1) contextmenu(ctrl):(5)" data-value-ids="{{ entity_id }}">
     <a id="{{ entity_id }}.hp.current" class="value render-value" data-value="{{ entity_id }}.hp:value"></a>/<a id="{{ entity_id }}.hp.max" class="value render-value" data-value="{{ entity_id }}:hp"></a>
   </button></td>
   <td id="{{ entity_id }}.str" class="value render-modifier" data-value="{{ entity_id }}:strMod"></td>
