@@ -207,6 +207,7 @@ DnD.Parsers.ElementId = /[a-zA-Z_][\w\.]*/;
 DnD.Parsers.AttributeName = /[a-zA-Z_]\w*/;
 DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(new DnD.Parsers.Optional(DnD.Parsers.ElementId), /:/, new DnD.Parsers.Optional(DnD.Parsers.AttributeName));
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
+DnD.Parsers.ValueOrIdAttr = new DnD.Parsers.Alternatives(DnD.Parsers.IdAttr, /\d+/);
 
 DnD.extractIdAttr = function(ast) {
   if (ast.status == "ok") {

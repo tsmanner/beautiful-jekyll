@@ -17,15 +17,15 @@
   data-{{ bonus[0] }}-bonuses="{{ bonus[1] }}"
   {%- endfor -%}>
   <th><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></th>
-  <td><button id="{{ entity_id }}.initiative" class="value-reference" data-value-source="{{ entity_id }}:initiative"></button></td>
-  <td id="{{ entity_id }}.ac" class="value-reference render-value" data-value-source-attribute="ac"></td>
-  <td><button id="{{ entity_id }}.hp" class="value-range increment decrement" data-value-min="0" data-value-max="{{ include.entity.hp }}" data-decrement="click:(1) click(ctrl):(5)" data-increment="contextmenu:(1) contextmenu(ctrl):(5)" data-value-reference-ids="{{ entity_id }}">
-    <a id="{{ entity_id }}.hp.current" class="value-reference render-value" data-value-source="{{ entity_id }}.hp:value"></a>/<a id="{{ entity_id }}.hp.max" class="value-reference render-value" data-value-source="{{ entity_id }}:hp"></a>
+  <td><button id="{{ entity_id }}.initiative" class="value" data-value="{{ entity_id }}:initiative"></button></td>
+  <td id="{{ entity_id }}.ac" class="value render-value" data-value="{{ entity_id }}:ac"></td>
+  <td><button id="{{ entity_id }}.hp" class="value-range increment decrement" data-value-min="0" data-value-max="{{ entity_id }}:hp" data-decrement="click:(1) click(ctrl):(5)" data-increment="contextmenu:(1) contextmenu(ctrl):(5)" data-value-ids="{{ entity_id }}">
+    <a id="{{ entity_id }}.hp.current" class="value render-value" data-value="{{ entity_id }}.hp:value"></a>/<a id="{{ entity_id }}.hp.max" class="value render-value" data-value="{{ entity_id }}:hp"></a>
   </button></td>
-  <td id="{{ entity_id }}.str" class="value-reference render-modifier" data-value-source="{{ entity_id }}:strMod"></td>
-  <td id="{{ entity_id }}.dex" class="value-reference render-modifier" data-value-source="{{ entity_id }}:dexMod"></td>
-  <td id="{{ entity_id }}.con" class="value-reference render-modifier" data-value-source="{{ entity_id }}:conMod"></td>
-  <td id="{{ entity_id }}.int" class="value-reference render-modifier" data-value-source="{{ entity_id }}:intMod"></td>
-  <td id="{{ entity_id }}.wis" class="value-reference render-modifier" data-value-source="{{ entity_id }}:wisMod"></td>
-  <td id="{{ entity_id }}.cha" class="value-reference render-modifier" data-value-source="{{ entity_id }}:chaMod"></td>
+  <td id="{{ entity_id }}.str" class="value render-modifier" data-value="{{ entity_id }}:strMod"></td>
+  <td id="{{ entity_id }}.dex" class="value render-modifier" data-value="{{ entity_id }}:dexMod"></td>
+  <td id="{{ entity_id }}.con" class="value render-modifier" data-value="{{ entity_id }}:conMod"></td>
+  <td id="{{ entity_id }}.int" class="value render-modifier" data-value="{{ entity_id }}:intMod"></td>
+  <td id="{{ entity_id }}.wis" class="value render-modifier" data-value="{{ entity_id }}:wisMod"></td>
+  <td id="{{ entity_id }}.cha" class="value render-modifier" data-value="{{ entity_id }}:chaMod"></td>
 </tr>
