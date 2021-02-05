@@ -22,7 +22,7 @@
     class="modifier action"
     data-value="{{ entity_id }}:initiative"
     data-roll="d20"
-    data-actions="click:prompt contextmenu:roll"
+    data-actions="click[ctrl]:prompt contextmenu:roll"
   ></button></td>
   <td id="{{ entity_id }}.ac" class="value" data-value="{{ entity_id }}:ac"></td>
   <td><button id="{{ entity_id }}.hp" class="value" data-value="{{ include.entity.hp }}">
