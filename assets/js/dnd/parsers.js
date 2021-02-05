@@ -162,7 +162,7 @@ DnD.Parsers.Optional = class extends DnD.Parsers.Repeat {
   parse(inString) {
     let superResult = super.parse(inString);
     if (superResult.children.length == 1) {
-      return new DnD.Parsers.Result(this, superResult.children[0], superResult.length, "ok");
+      return new DnD.Parsers.Result(this, [superResult.children[0]], superResult.length, "ok");
     }
     return new DnD.Parsers.Result(this, [], 0, "ok");
   }
@@ -249,7 +249,7 @@ DnD.Parsers.extractEventWithKeys = function(ast) {
   if (ast.status == "ok") {
     return {
       event: ast.children[0].children[0],
-      keys: ast.children[1].children[0].children[1],
+      keys: ast.children[1].children[0].children[1].children,
     };
   }
 }
