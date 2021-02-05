@@ -9,8 +9,8 @@ DnD.Actions = {
   },
 
   initAction: function(element) {
-    let eventWithKeys = DnD.Parsers.extractEventWithKeys(DnD.Parsers.EventWithKeys.parse(element.dataset.actions));
-    console.log(eventWithKeys);
+    let eventsWithKeys = DnD.Parsers.extractEventsWithKeys(DnD.Parsers.EventsWithKeys.parse(element.dataset.actions));
+    console.log(eventsWithKeys);
   },
 
   initActions: function() { Array.from(document.getElementsByClassName("action")).map(DnD.Actions.initAction); },

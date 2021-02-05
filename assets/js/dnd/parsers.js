@@ -245,6 +245,7 @@ DnD.Parsers.EventWithKeys = new DnD.Parsers.Sequence(
     /\]/
   ))
 );
+DnD.Parsers.EventsWithKeys = new DnD.Parsers.SepBy(/ /, DnD.Parsers.EventWithKeys);
 DnD.Parsers.extractEventWithKeys = function(ast) {
   if (ast.status == "ok") {
     return {
@@ -252,4 +253,7 @@ DnD.Parsers.extractEventWithKeys = function(ast) {
       keys: ast.children[1].children.length == 1 ? ast.children[1].children[0].children[1].children : [],
     };
   }
+}
+DnD.Parsers.extractEventsWithKeys = function(ast) {
+  return ast.children.map(DnD.Parsers.extractEventWithKeys);
 }
