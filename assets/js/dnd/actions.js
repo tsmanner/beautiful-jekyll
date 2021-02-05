@@ -17,4 +17,4 @@ DnD.Actions = {
 
 }
 
-DnD.initFunctions.push(DnD.Value.initActions);
+DnD.initFunctions.push(DnD.Actions.initActions);
