@@ -249,7 +249,7 @@ DnD.Parsers.extractEventWithKeys = function(ast) {
   if (ast.status == "ok") {
     return {
       event: ast.children[0].children[0],
-      keys: ast.children[1].children[0].children[1].children,
+      keys: ast.children[1].children.length == 1 ? ast.children[1].children[0].children[1].children : [],
     };
   }
 }
