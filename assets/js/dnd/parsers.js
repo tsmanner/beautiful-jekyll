@@ -239,9 +239,9 @@ DnD.Parsers.EventKey = /(alt|ctrl|shift)/;
 DnD.Parsers.EventKeys = new DnD.Parsers.SepBy(/,/, DnD.Parsers.EventKey);
 DnD.Parsers.EventWithKeys = new DnD.Parsers.Sequence(
   DnD.Parsers.Event,
-  new DnD.Parsers.Optional(
+  new DnD.Parsers.Optional(new DnD.Parsers.Sequence(
     /\[/,
     DnD.Parsers.EventKeys,
     /\]/
-  )
+  ))
 );
