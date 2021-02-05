@@ -34,3 +34,4 @@ DnD.Value = {
 
 
 DnD.initFunctions.push(DnD.Value.renderValues);
+DnD.initFunctions.push(DnD.Value.renderModifiers);
