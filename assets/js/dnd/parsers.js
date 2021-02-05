@@ -188,9 +188,9 @@ DnD.Parsers.SepBy = class extends DnD.Parsers.Parser {
     if (sequenceResult.status == "ok") {
       let flatChildren = sequenceResult.children[1].children.reduce(
         function(children, res) {
-          children.push(res.children[1].children[0]);
+          children.push(res.children[1]);
           return children
-        }, [sequenceResult.children[0].children[0]]
+        }, [sequenceResult.children[0]]
       );
       return new DnD.Parsers.Result(this, flatChildren, sequenceResult.length, "ok");
     }
@@ -219,10 +219,20 @@ DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 DnD.Parsers.ValueOrIdAttr = new DnD.Parsers.Alternatives(DnD.Parsers.IdAttr, /\d+/);
 DnD.Parsers.extractIdAttr = function(ast) {
   if (ast.status == "ok") {
-    let idOptional = ast.children[0];
-    let id = ("children" in idOptional && idOptional.children.length == 1) ? idOptional.children[0].children[0] : null;
-    let attrOptional = ast.children[2];
-    let attr = ("children" in attrOptional && attrOptional.children.length == 1) ? attrOptional.children[0].children[0] : null;
+    let hasId = ast.children[0].children.length == 1;
+    let id = hasId
+           ? ast            // DnD.Parsers.IdAttr
+              .children[0]  // DnD.Parsers.Optional(DnD.Parsers.ElementId)
+              .children[0]  // DnD.Parsers.ElementId
+              .children[0]  // ElementId
+           : [];
+    let hasAttr = ast.children[2].children.length == 1;
+    let attr = hasAttr
+           ? ast            // DnD.Parsers.IdAttr
+              .children[2]  // DnD.Parsers.Optional(DnD.Parsers.AttributeName)
+              .children[0]  // DnD.Parsers.AttributeName
+              .children[0]  // AttributeName
+           : [];
     return { id: id, attr: attr, };
   }
   else {
@@ -230,7 +240,7 @@ DnD.Parsers.extractIdAttr = function(ast) {
   }
 }
 DnD.Parsers.extractIdAttrs = function(ast) {
-  return ast.children.map(DnD.extractIdAttr);
+  return ast.children.map(DnD.Parsers.extractIdAttr);
 }
 
 // Actions
@@ -248,9 +258,17 @@ DnD.Parsers.EventWithKeys = new DnD.Parsers.Sequence(
 DnD.Parsers.EventsWithKeys = new DnD.Parsers.SepBy(/ /, DnD.Parsers.EventWithKeys);
 DnD.Parsers.extractEventWithKeys = function(ast) {
   if (ast.status == "ok") {
+    let hasKeys = ast.children[1].children.length == 1;
+    let keys = hasKeys
+             ? ast            // DnD.Parsers.SepBy(/ /, DnD.Parsers.EventWithKeys).children[N]
+                .children[1]  // DnD.Parsers.Optional(DnD.Parsers.Sequence(/\[/, DnD.Parsers.EventKeys, /\]/)
+                .children[0]  // DnD.Parsers.Sequence(/\[/, DnD.Parsers.EventKeys, /\]/)
+                .children[1]  // DnD.Parsers.EventKeys
+                .children.map(function(key) { return key.children[0]; })
+             : [];
     return {
       event: ast.children[0].children[0],
-      keys: ast.children[1].children.length == 1 ? ast.children[1].children[0].children[1].children : [],
+      keys: keys,
     };
   }
 }

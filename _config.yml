@@ -183,6 +183,7 @@ date_format: "%B %-d, %Y"
 # Facebook App ID
 #fb_app_id: ""
 
+# Dungeons and Dragons elements
 dnd:
   enable: true
 
