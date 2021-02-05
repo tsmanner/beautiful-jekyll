@@ -8,7 +8,7 @@ DnD.Value = {
           return parseInt(parseResult.children[0].children[0]);
         }
         else {
-          let source = DnD.extractIdAttr(parseResult.children[0]);
+          let source = DnD.Parsers.extractIdAttr(parseResult.children[0]);
           if (source.id == null) { source.id = element.id; }
           if (source.attr == null) { source.attr = "value"; }
           return parseInt(document.getElementById(source.id).dataset[source.attr]);

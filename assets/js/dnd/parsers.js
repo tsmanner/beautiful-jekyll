@@ -217,7 +217,7 @@ DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(
 );
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 DnD.Parsers.ValueOrIdAttr = new DnD.Parsers.Alternatives(DnD.Parsers.IdAttr, /\d+/);
-DnD.extractIdAttr = function(ast) {
+DnD.Parsers.extractIdAttr = function(ast) {
   if (ast.status == "ok") {
     let idOptional = ast.children[0].children;
     let id = ("children" in idOptional && idOptional.children.length == 1) ? idOptional.children[0] : null;
@@ -229,7 +229,7 @@ DnD.extractIdAttr = function(ast) {
     throw "Invalid IdAttr '"+inString+"'";
   }
 }
-DnD.extractIdAttrs = function(ast) {
+DnD.Parsers.extractIdAttrs = function(ast) {
   return ast.children.map(DnD.extractIdAttr);
 }
 
@@ -245,3 +245,11 @@ DnD.Parsers.EventWithKeys = new DnD.Parsers.Sequence(
     /\]/
   ))
 );
+DnD.Parsers.extractEventWithKeys(ast) {
+  if (ast.status == "ok") {
+    return {
+      event: ast.children[0].children[0],
+      keys: ast.children[1].children[0].children[1],
+    };
+  }
+}
