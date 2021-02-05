@@ -203,6 +203,11 @@ DnD.Parsers.SepBy = class extends DnD.Parsers.Repeat {
 // Some common parser instances and helper functions
 //
 
+// Dice
+DnD.Parsers.Die = /d(4|6|8|10|12|20)/;
+DnD.Parsers.Dice = new DnD.Parsers.SepBy(/ /, DnD.Parsers.Die);
+
+// IDs and Attributes
 DnD.Parsers.ElementId = /[a-zA-Z_][\w\.]*/;
 DnD.Parsers.AttributeName = /[a-zA-Z_]\w*/;
 DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(
@@ -212,7 +217,6 @@ DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(
 );
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
 DnD.Parsers.ValueOrIdAttr = new DnD.Parsers.Alternatives(DnD.Parsers.IdAttr, /\d+/);
-
 DnD.extractIdAttr = function(ast) {
   if (ast.status == "ok") {
     let idOptional = ast.children[0].children;
@@ -225,9 +229,19 @@ DnD.extractIdAttr = function(ast) {
     throw "Invalid IdAttr '"+inString+"'";
   }
 }
-
 DnD.extractIdAttrs = function(ast) {
   return ast.children.map(DnD.extractIdAttr);
 }
 
-
+// Actions
+DnD.Parsers.Event = /(click|dblclick|auxclick|contextmenu)/;
+DnD.Parsers.EventKey = /(alt|ctrl|shift)/;
+DnD.Parsers.EventKeys = new DnD.Parsers.SepBy(/,/, DnD.Parsers.EventKey);
+DnD.Parsers.EventWithKeys = new DnD.Parsers.Sequence(
+  DnD.Parsers.Event,
+  new DnD.Parsers.Optional(
+    /\[/,
+    DnD.Parsers.EventKeys,
+    /\]/
+  )
+);

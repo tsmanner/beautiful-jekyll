@@ -17,10 +17,17 @@
   data-{{ bonus[0] }}-bonuses="{{ bonus[1] }}"
   {%- endfor -%}>
   <th><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></th>
-  <td><button id="{{ entity_id }}.initiative" class="modifier" data-value="{{ entity_id }}:initiative"></button></td>
+  <td><button
+    id="{{ entity_id }}.initiative"
+    class="modifier action"
+    data-value="{{ entity_id }}:initiative"
+    data-roll="d20"
+    data-actions="click:prompt contextmenu:roll"
+  ></button></td>
   <td id="{{ entity_id }}.ac" class="value" data-value="{{ entity_id }}:ac"></td>
-  <td><button id="{{ entity_id }}.hp" class="value value-range increment decrement" data-value="{{ include.entity.hp }}" data-value-min="0" data-value-max="{{ entity_id }}:hp" data-decrement="click:(1) click(ctrl):(5)" data-increment="contextmenu:(1) contextmenu(ctrl):(5)" data-value-ids="{{ entity_id }}">
-    <a id="{{ entity_id }}.hp.current" class="value" data-value="{{ entity_id }}.hp:value"></a>/<a id="{{ entity_id }}.hp.max" class="value" data-value="{{ entity_id }}:hp"></a>
+  <td><button id="{{ entity_id }}.hp" class="value" data-value="{{ include.entity.hp }}">
+    <a id="{{ entity_id }}.hp.current" class="value" data-value="{{ entity_id }}.hp:value"></a>
+    /<a id="{{ entity_id }}.hp.max" class="value" data-value="{{ entity_id }}:hp"></a>
   </button></td>
   <td id="{{ entity_id }}.str" class="modifier" data-value="{{ entity_id }}:strMod"></td>
   <td id="{{ entity_id }}.dex" class="modifier" data-value="{{ entity_id }}:dexMod"></td>
