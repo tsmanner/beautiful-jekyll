@@ -16,3 +16,5 @@ DnD.Actions = {
   initActions: function() { Array.from(document.getElementsByClassName("action")).map(DnD.Actions.initAction); },
 
 }
+
+DnD.initFunctions.push(DnD.Value.initActions);
