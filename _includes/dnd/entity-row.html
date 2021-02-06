@@ -19,13 +19,13 @@
   <th><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></th>
   <td><button
     id="{{ entity_id }}.initiative"
-    class="modifier action"
+    class="roll action"
     data-value="{{ entity_id }}:initiative"
     data-roll="d20"
-    data-actions="click[ctrl]:prompt contextmenu:roll"
+    data-actions="click[ctrl]:prompt click:roll contextmenu:reset"
   ></button></td>
   <td id="{{ entity_id }}.ac" class="value" data-value="{{ entity_id }}:ac"></td>
-  <td><button id="{{ entity_id }}.hp" class="value" data-value="{{ include.entity.hp }}">
+  <td><button id="{{ entity_id }}.hp" data-value="{{ include.entity.hp }}">
     <a id="{{ entity_id }}.hp.current" class="value" data-value="{{ entity_id }}.hp:value"></a>
     /<a id="{{ entity_id }}.hp.max" class="value" data-value="{{ entity_id }}:hp"></a>
   </button></td>

@@ -27,11 +27,22 @@ DnD.Value = {
     else { element.innerHTML = value; }
   },
 
+  renderRoll: function(element) {
+    if ("rollResult" in element.dataset) {
+      element.innerHTML = element.dataset.rollResult;
+    }
+    else {
+      DnD.Value.renderModifier(element);
+    }
+  },
+
   renderValues: function() { Array.from(document.getElementsByClassName("value")).map(DnD.Value.renderValue); },
   renderModifiers: function() { Array.from(document.getElementsByClassName("modifier")).map(DnD.Value.renderModifier); },
+  renderRolls: function() { Array.from(document.getElementsByClassName("roll")).map(DnD.Value.renderRoll); },
 
 }
 
 
 DnD.initFunctions.push(DnD.Value.renderValues);
 DnD.initFunctions.push(DnD.Value.renderModifiers);
+DnD.initFunctions.push(DnD.Value.renderRolls);

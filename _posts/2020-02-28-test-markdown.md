@@ -76,3 +76,12 @@ You can add notification, warning and error boxes like this:
 
 {: .box-error}
 **Error:** This is an error box.
+
+## D&D Stuff
+
+### Entity Table
+
+<table>
+{% include dnd/entity-table-head.html %}
+{% include dnd/entity-row.html entity=site.data.dnd.test_entity %}
+</table>

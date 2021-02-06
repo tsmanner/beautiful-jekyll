@@ -204,8 +204,16 @@ DnD.Parsers.SepBy = class extends DnD.Parsers.Parser {
 //
 
 // Dice
-DnD.Parsers.Die = /d(4|6|8|10|12|20)/;
-DnD.Parsers.Dice = new DnD.Parsers.SepBy(/ /, DnD.Parsers.Die);
+DnD.Parsers.Die = new DnD.Parsers.Sequence(
+  new DnD.Parsers.Optional(/\d+/),
+  /d/,
+  /(4|6|8|10|12|20|100)/
+);
+DnD.Parsers.Roll = new DnD.Parsers.Alternatives(/\d+/, DnD.Parsers.Die);
+DnD.Parsers.RollPlus = new DnD.Parsers.Sequence(DnD.Parsers.Roll, /\+/, DnD.Parsers.Roll);
+DnD.Parsers.RollMinus = new DnD.Parsers.Sequence(DnD.Parsers.Roll, /-/, DnD.Parsers.Roll);
+// DnD.Parsers.Roll.matchers.push(DnD.Parsers.RollPlus);
+// DnD.Parsers.Roll.matchers.push(DnD.Parsers.RollMinus);
 
 // IDs and Attributes
 DnD.Parsers.ElementId = /[a-zA-Z_][\w\.]*/;
@@ -243,7 +251,7 @@ DnD.Parsers.extractIdAttrs = function(ast) {
   return ast.children.map(DnD.Parsers.extractIdAttr);
 }
 
-// Actions
+// Events
 DnD.Parsers.Event = /(click|dblclick|auxclick|contextmenu)/;
 DnD.Parsers.EventKey = /(alt|ctrl|shift)/;
 DnD.Parsers.EventKeys = new DnD.Parsers.SepBy(/,/, DnD.Parsers.EventKey);
@@ -255,23 +263,41 @@ DnD.Parsers.EventWithKeys = new DnD.Parsers.Sequence(
     /\]/
   ))
 );
-DnD.Parsers.EventsWithKeys = new DnD.Parsers.SepBy(/ /, DnD.Parsers.EventWithKeys);
 DnD.Parsers.extractEventWithKeys = function(ast) {
   if (ast.status == "ok") {
     let hasKeys = ast.children[1].children.length == 1;
-    let keys = hasKeys
+    let keys = (hasKeys
              ? ast            // DnD.Parsers.SepBy(/ /, DnD.Parsers.EventWithKeys).children[N]
                 .children[1]  // DnD.Parsers.Optional(DnD.Parsers.Sequence(/\[/, DnD.Parsers.EventKeys, /\]/)
                 .children[0]  // DnD.Parsers.Sequence(/\[/, DnD.Parsers.EventKeys, /\]/)
                 .children[1]  // DnD.Parsers.EventKeys
                 .children.map(function(key) { return key.children[0]; })
-             : [];
+             : [])
+    .reduce(
+      function (keys, key) { keys[key+"Key"] = true; return keys; },
+      { altKey: false, ctrlKey: false, shiftKey: false }
+    );
     return {
       event: ast.children[0].children[0],
       keys: keys,
     };
   }
 }
+DnD.Parsers.EventsWithKeys = new DnD.Parsers.SepBy(/ /, DnD.Parsers.EventWithKeys);
 DnD.Parsers.extractEventsWithKeys = function(ast) {
   return ast.children.map(DnD.Parsers.extractEventWithKeys);
 }
+
+// Actions
+DnD.Parsers.Action = /(prompt|roll|reset)/;
+DnD.Parsers.EventAction = new DnD.Parsers.Sequence(DnD.Parsers.EventWithKeys, /:/, DnD.Parsers.Action);
+DnD.Parsers.extractEventAction = function(ast) {
+  let eventAction = DnD.Parsers.extractEventWithKeys(ast.children[0]);
+  eventAction.action = ast.children[2].children[0];
+  return eventAction;
+}
+DnD.Parsers.EventActions = new DnD.Parsers.SepBy(/ /, DnD.Parsers.EventAction);
+DnD.Parsers.extractEventActions = function(ast) {
+  return ast.children.map(DnD.Parsers.extractEventAction);
+}
+

@@ -1,0 +1,17 @@
+test_entity:
+  name: Test Entity
+  player: Some Dude
+  link: https://www.testentity.com/character
+  level: 3
+  proficiency: 2
+  str: 10
+  dex: 17
+  con: 15
+  int: 8
+  wis: 15
+  cha: 8
+  ac: 16
+  hp: 28
+  bonuses:
+    str: proficiency
+    dex: proficiency
