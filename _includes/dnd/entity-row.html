@@ -2,10 +2,14 @@
 {% if entity_id != "" %} {% assign entity_id = entity_id | append: "." %} {% endif %}
 {% assign entity_id = entity_id | append: include.entity.name | replace: ' ', '_' %}
 
-<tr id="{{ entity_id }}"
+<tr
+  is="dnd-entity"
+  id="{{ entity_id }}_t"
   class="entity"
+  data-name="{{ include.entity.name }}"
+  data-link="{{ include.entity.link }}"
   data-proficiency="{{ include.entity.proficiency }}"
-  data-hp="{{ include.entity.hp }}"
+  data-max-hp="{{ include.entity.hp }}"
   data-ac="{{ include.entity.ac }}"
   data-str="{{ include.entity.str }}"
   data-dex="{{ include.entity.dex }}"
@@ -16,23 +20,24 @@
   {% for bonus in include.entity.bonuses %}
   data-{{ bonus[0] }}-bonuses="{{ bonus[1] }}"
   {%- endfor -%}>
-  <th><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></th>
-  <td><button
-    id="{{ entity_id }}.initiative"
-    class="roll action"
-    data-value="{{ entity_id }}:initiative"
-    data-roll="d20"
-    data-actions="click[ctrl]:prompt click:roll contextmenu:reset"
-  ></button></td>
-  <td id="{{ entity_id }}.ac" class="value" data-value="{{ entity_id }}:ac"></td>
-  <td><button id="{{ entity_id }}.hp" data-value="{{ include.entity.hp }}">
-    <a id="{{ entity_id }}.hp.current" class="value" data-value="{{ entity_id }}.hp:value"></a>
-    /<a id="{{ entity_id }}.hp.max" class="value" data-value="{{ entity_id }}:hp"></a>
-  </button></td>
-  <td id="{{ entity_id }}.str" class="modifier" data-value="{{ entity_id }}:strMod"></td>
-  <td id="{{ entity_id }}.dex" class="modifier" data-value="{{ entity_id }}:dexMod"></td>
-  <td id="{{ entity_id }}.con" class="modifier" data-value="{{ entity_id }}:conMod"></td>
-  <td id="{{ entity_id }}.int" class="modifier" data-value="{{ entity_id }}:intMod"></td>
-  <td id="{{ entity_id }}.wis" class="modifier" data-value="{{ entity_id }}:wisMod"></td>
-  <td id="{{ entity_id }}.cha" class="modifier" data-value="{{ entity_id }}:chaMod"></td>
+  <th>
+    <dnd-entity-name class="dnd-entity-link"></dnd-entity-name>
+  </th>
+  <td>
+    <button class="dnd-action" data-actions="click:roll(initiative) contextmenu:reset(initiative) click[ctrl]:input(initiative)">
+      <dnd-entity-ability data-ability="initiative"></dnd-entity-ability>
+    </button>
+  </td>
+  <td>
+    {{ include.entity.ac }}
+  </td>
+  <td>
+    {{ include.entity.hp }}/{{ include.entity.hp }}
+  </td>
+  <td><dnd-entity-ability data-ability="str"></dnd-entity-ability></td>
+  <td><dnd-entity-ability data-ability="dex"></dnd-entity-ability></td>
+  <td><dnd-entity-ability data-ability="con"></dnd-entity-ability></td>
+  <td><dnd-entity-ability data-ability="int"></dnd-entity-ability></td>
+  <td><dnd-entity-ability data-ability="wis"></dnd-entity-ability></td>
+  <td><dnd-entity-ability data-ability="cha"></dnd-entity-ability></td>
 </tr>

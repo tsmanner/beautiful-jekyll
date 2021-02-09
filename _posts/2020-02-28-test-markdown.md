@@ -85,3 +85,4 @@ You can add notification, warning and error boxes like this:
 {% include dnd/entity-table-head.html %}
 {% include dnd/entity-row.html entity=site.data.dnd.test_entity %}
 </table>
+

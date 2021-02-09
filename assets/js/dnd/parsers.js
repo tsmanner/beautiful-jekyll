@@ -97,10 +97,10 @@ DnD.Parsers.Sequence = class extends DnD.Parsers.Parser {
 
 
 //
-// Alternatives Parser
+// OneOf Parser
 //   Takes a list of matchers, requiring that exactly one match
 //
-DnD.Parsers.Alternatives = class extends DnD.Parsers.Parser {
+DnD.Parsers.OneOf = class extends DnD.Parsers.Parser {
   constructor(...matchers) { super(...matchers); }
 
   parse(inString) {
@@ -115,11 +115,50 @@ DnD.Parsers.Alternatives = class extends DnD.Parsers.Parser {
       return new DnD.Parsers.Result(this, [success], success.length, "ok");
     }
     else if (successes.length == 0) {
-      return new DnD.Parsers.Result(this, [], 0, "NoAlternatives");
+      return new DnD.Parsers.Result(this, [], 0, "OneOf-NoMatches");
     }
     else {
-      return new DnD.Parsers.Result(this, [], 0, "MultipleAlternatives("+successes.map(function(result) { return result.matcher; }).join(", ")+")");
+      return new DnD.Parsers.Result(this, [], 0, "OneOf-MultipleMatches("+successes.map(function(result) { return result.matcher; }).join(", ")+")");
     }
+  }
+}
+
+
+//
+// LongestOf Parser
+//   Takes a list of matchers, yielding the longest match
+//
+DnD.Parsers.LongestOf = class extends DnD.Parsers.Parser {
+  constructor(...matchers) { super(...matchers); }
+
+  parse(inString) {
+    let result = new DnD.Parsers.Result(this, [], 0, "LongestOf-NoMatches");
+    for (const matcher of this.matchers) {
+      const currentResult = super.match(matcher, inString);
+      if (currentResult.result.status == "ok" && currentResult.result.length > result.length) {
+        result = currentResult.result;
+      }
+    }
+    return new DnD.Parsers.Result(this, [result], result.length, "ok");
+  }
+}
+
+
+//
+// FirstOf Parser
+//   Takes a list of matchers, yielding the first match
+//
+DnD.Parsers.FirstOf = class extends DnD.Parsers.Parser {
+  constructor(...matchers) { super(...matchers); }
+
+  parse(inString) {
+    for (const matcher of this.matchers) {
+      const result = super.match(matcher, inString);
+      if (result.result.status == "ok") {
+        return new DnD.Parsers.Result(this, [result.result], result.result.length, "ok");
+      }
+    }
+    return new DnD.Parsers.Result(this, [], 0, "FirstOf-NoMatches");
   }
 }
 
@@ -209,11 +248,47 @@ DnD.Parsers.Die = new DnD.Parsers.Sequence(
   /d/,
   /(4|6|8|10|12|20|100)/
 );
-DnD.Parsers.Roll = new DnD.Parsers.Alternatives(/\d+/, DnD.Parsers.Die);
-DnD.Parsers.RollPlus = new DnD.Parsers.Sequence(DnD.Parsers.Roll, /\+/, DnD.Parsers.Roll);
-DnD.Parsers.RollMinus = new DnD.Parsers.Sequence(DnD.Parsers.Roll, /-/, DnD.Parsers.Roll);
-// DnD.Parsers.Roll.matchers.push(DnD.Parsers.RollPlus);
-// DnD.Parsers.Roll.matchers.push(DnD.Parsers.RollMinus);
+DnD.Parsers.RollValue = new DnD.Parsers.FirstOf(DnD.Parsers.Die, /\d+/);
+DnD.Parsers.extractRollValue = function(ast) {
+  if (ast.status == "ok") {
+    // If it's a simple value
+    if (ast.children[0].matcher instanceof RegExp) {
+      return {
+        count: parseInt(ast.children[0].children[0]),
+        die: 1,
+      }
+    }
+    // Otherwise, it's a die roll
+    let hasCount = ast.children[0].children[0].children.length == 1;
+    return {
+      count: hasCount ? parseInt(ast.children[0].children[0].children[0].children[0]) : 1,
+      die: parseInt(ast.children[0].children[2].children[0]),
+    };
+  }
+  throw "Invalid RollValue '"+ast+"'";
+}
+DnD.Parsers.Roll = new DnD.Parsers.Sequence(
+  DnD.Parsers.RollValue,
+  new DnD.Parsers.Many(
+    new DnD.Parsers.Sequence(
+      /(\+|-)/,
+      DnD.Parsers.RollValue
+    )
+  )
+);
+DnD.Parsers.extractRoll = function(ast) {
+  if (ast.status == "ok") {
+    let roll = [DnD.Parsers.extractRollValue(ast.children[0])];
+    roll[0].sign = "+";
+    return roll.concat(ast.children[1].children.map(function(child) {
+      let rollValue = DnD.Parsers.extractRollValue(child.children[1]);
+      console.log(rollValue, child);
+      rollValue.sign = child.children[0].children[0];
+      return rollValue;
+    }));
+  }
+  throw "Invalid Roll '"+ast+"'";
+}
 
 // IDs and Attributes
 DnD.Parsers.ElementId = /[a-zA-Z_][\w\.]*/;
@@ -224,7 +299,7 @@ DnD.Parsers.IdAttr  = new DnD.Parsers.Sequence(
   new DnD.Parsers.Optional(DnD.Parsers.AttributeName)
 );
 DnD.Parsers.IdAttrs = new DnD.Parsers.SepBy(/ /, DnD.Parsers.IdAttr);
-DnD.Parsers.ValueOrIdAttr = new DnD.Parsers.Alternatives(DnD.Parsers.IdAttr, /\d+/);
+DnD.Parsers.ValueOrIdAttr = new DnD.Parsers.OneOf(DnD.Parsers.IdAttr, /\d+/);
 DnD.Parsers.extractIdAttr = function(ast) {
   if (ast.status == "ok") {
     let hasId = ast.children[0].children.length == 1;
@@ -244,7 +319,7 @@ DnD.Parsers.extractIdAttr = function(ast) {
     return { id: id, attr: attr, };
   }
   else {
-    throw "Invalid IdAttr '"+inString+"'";
+    throw "Invalid IdAttr '"+ast+"'";
   }
 }
 DnD.Parsers.extractIdAttrs = function(ast) {
@@ -282,6 +357,7 @@ DnD.Parsers.extractEventWithKeys = function(ast) {
       keys: keys,
     };
   }
+  throw "Invalid EventWithKeys '"+ast+"'";
 }
 DnD.Parsers.EventsWithKeys = new DnD.Parsers.SepBy(/ /, DnD.Parsers.EventWithKeys);
 DnD.Parsers.extractEventsWithKeys = function(ast) {
@@ -289,15 +365,26 @@ DnD.Parsers.extractEventsWithKeys = function(ast) {
 }
 
 // Actions
-DnD.Parsers.Action = /(prompt|roll|reset)/;
-DnD.Parsers.EventAction = new DnD.Parsers.Sequence(DnD.Parsers.EventWithKeys, /:/, DnD.Parsers.Action);
+DnD.Parsers.Action = /(decrement|increment|input|prompt|reset|roll)/;
+DnD.Parsers.ActionArgs = new DnD.Parsers.Sequence(
+  /\(/,
+  new DnD.Parsers.SepBy(/,/, /[^\),]+/),
+  /\)/
+);
+DnD.Parsers.EventAction = new DnD.Parsers.Sequence(
+  DnD.Parsers.EventWithKeys,
+  /:/,
+  DnD.Parsers.Action,
+  new DnD.Parsers.Optional(DnD.Parsers.ActionArgs)
+);
 DnD.Parsers.extractEventAction = function(ast) {
   let eventAction = DnD.Parsers.extractEventWithKeys(ast.children[0]);
   eventAction.action = ast.children[2].children[0];
+  let hasActionArgs = ast.children[3].children.length == 1;
+  eventAction.actionArgs = hasActionArgs ? ast.children[3].children[0].children[1].children.map(function(child) { return child.children[0]; }) : [];
   return eventAction;
 }
 DnD.Parsers.EventActions = new DnD.Parsers.SepBy(/ /, DnD.Parsers.EventAction);
 DnD.Parsers.extractEventActions = function(ast) {
   return ast.children.map(DnD.Parsers.extractEventAction);
 }
-
