@@ -1,0 +1,11 @@
+.entity.healthy {
+  background-color: rgba(0, 64, 0, 0.5);
+}
+
+.entity.bloodied {
+  background-color: rgba(64, 0, 0, 0.5);
+}
+
+.entity.unconscious {
+  background-color: rgba(80, 80, 80, 0.5);
+}

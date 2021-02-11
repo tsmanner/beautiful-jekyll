@@ -32,7 +32,9 @@
     {{ include.entity.ac }}
   </td>
   <td>
-    {{ include.entity.hp }}/{{ include.entity.hp }}
+    <button class="dnd-action" data-actions="click:decrement(hp) click[ctrl]:decrement(hp,5) contextmenu:increment(hp) contextmenu[ctrl]:increment(hp,5)">
+      <dnd-entity-attribute data-attribute="hp"></dnd-entity-attribute>/<dnd-entity-attribute data-attribute="maxHp"></dnd-entity-attribute>
+    </button>
   </td>
   <td><dnd-entity-ability data-ability="str"></dnd-entity-ability></td>
   <td><dnd-entity-ability data-ability="dex"></dnd-entity-ability></td>

@@ -83,9 +83,12 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
       "data-int-check",
       "data-wis-check",
       "data-cha-check",
-      "data-hp",
+      // "data-hp",  // HP is handled independently since it makes other changes
     ]});
+    this.hpObserver = new MutationObserver(Entity.handleHpMutation);
+    this.hpObserver.observe(this, { attributeFilter: [ "data-hp" ] });
     this.update();
+    this.updateHp();
   }
 
   getBonuses(attribute) {
@@ -118,6 +121,50 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
         delete element.dataset.abilityCheck;
       }
     }
+    // Arbitrary Attributes
+    for (let element of this.getElementsByTagName("dnd-entity-attribute")) {
+      let attribute = element.dataset.attribute;
+      element.dataset.value = this[attribute];
+    }
+  }
+
+  updateHp() {
+    if (this.hp == 0) {
+      this.classList.remove("bloodied");
+      this.classList.remove("healthy");
+      this.classList.add("unconscious");
+    }
+    else if (this.hp > Math.floor(this.maxHp / 2)) {
+      this.classList.remove("bloodied");
+      this.classList.remove("unconscious");
+      this.classList.add("healthy");
+    }
+    else if (this.hp <= Math.floor(this.maxHp / 2)) {
+      this.classList.remove("healthy");
+      this.classList.remove("unconscious");
+      this.classList.add("bloodied");
+    }
+  }
+
+  isInBounds(attribute, value) {
+    return this.attributeBounds[attribute].lower <= value && value <= this.attributeBounds[attribute].upper;
+  }
+
+  bound(attribute, value) {
+    return Math.min(
+      Math.max(this.attributeBounds[attribute].lower, value),
+      this.attributeBounds[attribute].upper
+    );
+  }
+
+  decrement(attribute, step="1") {
+    this[attribute] = this.bound(attribute, this[attribute] - parseInt(step));
+    this.dataset[attribute] = this[attribute]
+  }
+
+  increment(attribute, step="1") {
+    this[attribute] = this.bound(attribute, this[attribute] + parseInt(step));
+    this.dataset[attribute] = this[attribute]
   }
 
   input(attribute) {
@@ -125,7 +172,7 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
     if (value != null) {
       if (/^(\-?)[0-9]+$/.test(value)) {
         value = parseInt(value);
-        if (this.attributeBounds[attribute].lower <= value && value <= this.attributeBounds[attribute].upper) {
+        if (this.isInBounds(attribute, value)) {
           this.dataset[attribute+"Check"] = value;
           return;
         }
@@ -145,8 +192,14 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
 
   static update(mutationsList, observer) {
     for (const mutation of mutationsList) {
-      console.log(mutation);
       mutation.target.update();
+    }
+  }
+
+  static handleHpMutation(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      mutation.target.update();
+      mutation.target.updateHp();
     }
   }
 
@@ -190,4 +243,22 @@ DnD.EntityAbility = class extends HTMLElement {
   }
 };
 customElements.define("dnd-entity-ability", DnD.EntityAbility);
+
+
+DnD.EntityAttribute = class extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  static get observedAttributes() { return [ "data-value" ]; }
+  attributeChangedCallback(name, oldValue, newValue) {
+    if ("value" in this.dataset) {
+      this.innerHTML = this.dataset.value;
+    }
+    else {
+      this.innerHTML = "?";
+    }
+  }
+};
+customElements.define("dnd-entity-attribute", DnD.EntityAttribute);
 
