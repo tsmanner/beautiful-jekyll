@@ -16,11 +16,11 @@
       <button onclick="nextTurn('{{ encounter_id }}.table')">Next</button>
     </div>
     <table id="{{ encounter_id }}.table">
-      {% include encounter-table-head.html %}
+      {% include dnd/entity-table-head.html %}
 
       {% assign encounter = page.encounters | where: "name", include.name | first %}
       {% for entity_name in encounter.entities %}
-        {% include common/entity.html name=entity_name entity_prefix=forloop.index %}
+        {% include dnd/entity.html name=entity_name entity_prefix=forloop.index %}
       {% endfor %}
 
     </table>
