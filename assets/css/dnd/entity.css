@@ -14,12 +14,12 @@
   border: 3px solid gray;
 }
 
-dnd-entity-ability[data-ability-check] {
+.dnd-action dnd-entity-ability[data-ability-check] {
   font-style: normal;
   text-decoration: none;
 }
 
-dnd-entity-ability:not([data-ability-check]) {
+.dnd-action dnd-entity-ability:not([data-ability-check]) {
   font-style: italic;
   text-decoration: underline;
 }
