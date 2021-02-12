@@ -257,8 +257,16 @@ DnD.EntityAbility = class extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if ("abilityCheck" in this.dataset) {
       this.innerHTML = this.dataset.abilityCheck;
+      if (this.parentElement instanceof HTMLButtonElement) {
+        this.parentElement.classList.remove("border-outset");
+        this.parentElement.classList.add("border-inset");
+      }
     }
     else if ("abilityValue" in this.dataset) {
+      if (this.parentElement instanceof HTMLButtonElement) {
+        this.parentElement.classList.add("border-outset");
+        this.parentElement.classList.remove("border-inset");
+      }
       if (this.dataset.abilitySuffix == "") {
         this.innerHTML = "(" + this.dataset.abilityValue + ")";
       }
