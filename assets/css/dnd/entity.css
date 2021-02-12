@@ -14,10 +14,12 @@
   border: 3px solid gray;
 }
 
-button.border-inset {
-  border-style: inset;
+dnd-entity-ability[data-ability-check] {
+  font-style: normal;
+  text-decoration: none;
 }
 
-button.border-outset {
-  border-style: outset;
+dnd-entity-ability:not([data-ability-check]) {
+  font-style: italic;
+  text-decoration: underline;
 }
