@@ -1,28 +1,30 @@
 {% assign encounter_id = include.name | replace: ' ', '_' %}
-<details>
+<details is="dnd-encounter" class="encounter" id="{{ encounter_id }}">
   <summary>{{ include.name }}</summary>
-  <div class="encounter" id="{{ encounter_id }}">
-    <div>
-      <button onclick="setAbilityFormat('renderAbilityScore')">Score</button>
-      <button onclick="setAbilityFormat('renderAbilityMod')">Modifier</button>
-      <button onclick="setAbilityFormat('renderAbilitySave')">Save</button>
-      <button onclick="showAll('{{ encounter_id }}.table')" >Show All</button>
-      <button onclick="resetEncounter('{{ encounter_id }}.table')" >Reset</button>
-    </div>
-    <div>
-      <button onclick="autoRollInitiative('{{ encounter_id }}.table')" >Auto Roll Initiative</button>
-      <button onclick="sortEncounter('{{ encounter_id }}.table')" >Sort</button>
-      <button onclick="previousTurn('{{ encounter_id }}.table')">Previous</button>
-      <button onclick="nextTurn('{{ encounter_id }}.table')">Next</button>
-    </div>
-    <table id="{{ encounter_id }}.table">
-      {% include dnd/entity-table-head.html %}
-
+  <div>
+    <button onclick="{{ encounter_id }}.setAbilitySuffix('')">Score</button>
+    <button onclick="{{ encounter_id }}.setAbilitySuffix('Mod')">Modifier</button>
+    <button onclick="{{ encounter_id }}.setAbilitySuffix('Save')">Save</button>
+  </div>
+  <div>
+    <button onclick="autoRollInitiative('{{ encounter_id }}.table')" >Auto Roll Initiative</button>
+    <button onclick="{{ encounter_id }}.selectPrevious()">Previous</button>
+    <button onclick="{{ encounter_id }}.selectNext()">Next</button>
+  </div>
+  <table class="dnd-encounter-table">
+    {% include dnd/entity-table-head.html %}
+    <tbody>
       {% assign encounter = page.encounters | where: "name", include.name | first %}
       {% for entity_name in encounter.entities %}
-        {% include dnd/entity.html name=entity_name entity_prefix=forloop.index %}
-      {% endfor %}
 
-    </table>
-  </div>
+      {% assign hierarchy = entity_name | split: "." %}
+        {% assign entity = site.data.dnd %}
+        {% for hierarchy_name in hierarchy %}
+          {% assign entity = entity[hierarchy_name] %}
+        {% endfor %}
+
+        {% include dnd/entity-row.html entity=entity entity_prefix=forloop.index %}
+      {% endfor %}
+    </tbody>
+  </table>
 </details>

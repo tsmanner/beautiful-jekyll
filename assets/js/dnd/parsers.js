@@ -365,7 +365,7 @@ DnD.Parsers.extractEventsWithKeys = function(ast) {
 }
 
 // Actions
-DnD.Parsers.Action = /(decrement|increment|input|prompt|reset|roll)/;
+DnD.Parsers.Action = /(clear|decrement|increment|input|prompt|reset|roll)/;
 DnD.Parsers.ActionArgs = new DnD.Parsers.Sequence(
   /\(/,
   new DnD.Parsers.SepBy(/,/, /[^\),]+/),

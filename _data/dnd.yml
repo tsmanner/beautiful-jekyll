@@ -13,5 +13,5 @@ test_entity:
   ac: 16
   hp: 28
   bonuses:
-    strSave: proficiency
-    dexSave: proficiency
+    str-save: proficiency
+    dex-save: proficiency

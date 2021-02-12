@@ -10,7 +10,43 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
 
   constructor() {
     super();
+    // Store off the initial values
+    this.initialDataset = { ...this.dataset };
     // Initialize attributes
+    this.initializeAttributes();
+    // Initialize modifiers and saving throws
+    this.initializeModifiersAndSavingThrows();
+    // Actions
+    this.initializeActions();
+
+    // Add mutation observer to get a callback when data is changed
+    this.inputObserver = new MutationObserver(Entity.update);
+    this.inputObserver.observe(this, { attributeFilter: [
+      "data-initiative-check",
+      "data-str-save",
+      "data-dex-save",
+      "data-con-save",
+      "data-int-save",
+      "data-wis-save",
+      "data-cha-save",
+      "data-str-check",
+      "data-dex-check",
+      "data-con-check",
+      "data-int-check",
+      "data-wis-check",
+      "data-cha-check",
+      // "data-hp",  // HP is handled independently since it makes other changes
+    ]});
+    this.hpObserver = new MutationObserver(Entity.handleHpMutation);
+    this.hpObserver.observe(this, { attributeFilter: [ "data-hp" ] });
+    // Do an initial update pass to render the page once it's loaded
+    this.update();
+    this.updateHp();
+  }
+
+  initializeAttributes() {
+    // Initialize attributes
+    this.proficiency = parseInt(this.dataset.proficiency);
     this.maxHp = parseInt(this.dataset.maxHp);
     this.hp = this.maxHp;
     this.str = parseInt(this.dataset.str) + this.getBonuses("str");
@@ -19,6 +55,9 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
     this.int = parseInt(this.dataset.int) + this.getBonuses("int");
     this.wis = parseInt(this.dataset.wis) + this.getBonuses("wis");
     this.cha = parseInt(this.dataset.cha) + this.getBonuses("cha");
+  }
+
+  initializeModifiersAndSavingThrows() {
     // Initialize modifiers and saving throws
     for (let ability of Entity.abilities) {
       this[ability+"Mod"] = Math.floor((this[ability] - 10) / 2) + this.getBonuses(ability+"Mod");
@@ -34,8 +73,9 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
       this.attributeBounds[ability+"Mod"] = { lower: this[ability+"Mod"] + 1, upper: this[ability+"Mod"] + 21 };
       this.attributeBounds[ability+"Save"] = { lower: this[ability+"Save"] + 1, upper: this[ability+"Save"] + 21 };
     };
+  }
 
-    // Actions
+  initializeActions() {
     let eventListenerWrappers = {
       click: function (f) { return f; },
       auxclick: function (f) { return f; },
@@ -63,39 +103,13 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
         );
       }
     }
-
-    // Add mutation observer to get a callback when data is changed
-    // for (let attribute in this.dataset) {
-    //   attributeFilter.push("data-" + attribute.replace(/([A-Z])/g, function($1){return "-"+$1.toLowerCase();}));
-    // }
-    this.inputObserver = new MutationObserver(Entity.update);
-    this.inputObserver.observe(this, { attributeFilter: [
-      "data-initiative-check",
-      "data-str-save",
-      "data-dex-save",
-      "data-con-save",
-      "data-int-save",
-      "data-wis-save",
-      "data-cha-save",
-      "data-str-check",
-      "data-dex-check",
-      "data-con-check",
-      "data-int-check",
-      "data-wis-check",
-      "data-cha-check",
-      // "data-hp",  // HP is handled independently since it makes other changes
-    ]});
-    this.hpObserver = new MutationObserver(Entity.handleHpMutation);
-    this.hpObserver.observe(this, { attributeFilter: [ "data-hp" ] });
-    this.update();
-    this.updateHp();
   }
 
   getBonuses(attribute) {
     let bonusesName = attribute+"Bonuses";
     let bonus = 0;
-    if (bonusesName in this) {
-      for (let bonusAttr of this[bonusesName].split(" ")) {
+    if (bonusesName in this.dataset) {
+      for (let bonusAttr of this.dataset[bonusesName].split(" ")) {
         bonus += this[bonusAttr];
       }
     }
@@ -107,13 +121,14 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
     for (let element of this.getElementsByTagName("dnd-entity-name")) {
       element.dataset.name = this.dataset.name;
     }
+    // Link
     for (let element of this.querySelectorAll(".dnd-entity-link a")) {
       element.href = this.dataset.link;
     }
     // Ability Checks
     for (let element of this.getElementsByTagName("dnd-entity-ability")) {
       let ability = element.dataset.ability;
-      element.dataset.abilityMod = this[ability+"Mod"];
+      element.dataset.abilityValue = this[ability+element.dataset.abilitySuffix];
       if (ability+"Check" in this.dataset) {
         element.dataset.abilityCheck = this.dataset[ability+"Check"];
       }
@@ -182,11 +197,17 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
   }
 
   reset(attribute) {
+    this.dataset[attribute] = this.initialDataset[attribute];
+    this.initializeAttributes();
+    this.initializeModifiersAndSavingThrows();
+  }
+
+  clear(attribute) {
     delete this.dataset[attribute+"Check"];
   }
 
-  roll(attribute, roll="d20") {
-    let result = DnD.rollDie(DnD.Parsers.extractRoll(DnD.Parsers.Roll.parse(roll))) + this.getBonuses(attribute);
+  roll(attribute, suffix="Mod", roll="d20") {
+    let result = DnD.rollDie(DnD.Parsers.extractRoll(DnD.Parsers.Roll.parse(roll))) + this[attribute+suffix];
     this.dataset[attribute+"Check"] = result;
   }
 
@@ -212,7 +233,6 @@ DnD.EntityName = class extends HTMLElement {
     super();
     this.name = "";
     this.a = document.createElement("a");
-    // this.a.innerHTML = this.dataset.name;
     this.appendChild(this.a);
   }
 
@@ -227,15 +247,24 @@ customElements.define("dnd-entity-name", DnD.EntityName);
 DnD.EntityAbility = class extends HTMLElement {
   constructor() {
     super();
+    if (!("abilitySuffix" in this.dataset)) {
+      // Default to "Mod" values
+      this.dataset.abilitySuffix = "Mod";
+    }
   }
 
-  static get observedAttributes() { return [ "data-ability-mod", "data-ability-check" ]; }
+  static get observedAttributes() { return [ "data-ability-value", "data-ability-suffix", "data-ability-check" ]; }
   attributeChangedCallback(name, oldValue, newValue) {
     if ("abilityCheck" in this.dataset) {
       this.innerHTML = this.dataset.abilityCheck;
     }
-    else if ("abilityMod" in this.dataset) {
-      this.innerHTML = (this.dataset.abilityMod >= 0 ? "+" : "") + this.dataset.abilityMod;
+    else if ("abilityValue" in this.dataset) {
+      if (this.dataset.abilitySuffix == "") {
+        this.innerHTML = "(" + this.dataset.abilityValue + ")";
+      }
+      else {
+        this.innerHTML = (this.dataset.abilityValue >= 0 ? "+" : "") + this.dataset.abilityValue;
+      }
     }
     else {
       this.innerHTML = "?";
@@ -262,3 +291,13 @@ DnD.EntityAttribute = class extends HTMLElement {
 };
 customElements.define("dnd-entity-attribute", DnD.EntityAttribute);
 
+
+// Do an initial update/updateHp on all entity instances
+DnD.addInitFunction(function() {
+  for (let element of document.getElementsByClassName("entity")) {
+    if (element instanceof DnD.Entity) {
+      element.update();
+      element.updateHp();
+    }
+  }
+});
