@@ -37,7 +37,18 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
       row.classList.remove("selected");
       tbody.appendChild(row);
     }
-    rows[0].classList.add("selected");
+    this.select(rows[0]);
+  }
+
+  select(element) {
+    element.classList.add("selected");
+    for (let details of this.querySelectorAll(".dnd-entity-details")) {
+      details.classList.add("hidden");
+    }
+    let details = this.querySelector(".dnd-entity-details[data-entity-name='"+element.dataset.path+"']");
+    if (details) {
+      details.classList.remove("hidden");
+    }
   }
 
   selectPrevious() {
@@ -46,9 +57,8 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
     if (current == null) {
       previous = this.querySelector("tr:last-child.entity:not(.unconscious)");
       if (previous != null) {
-        previous.classList.add("selected");
+        this.select(previous);
       }
-      return;
     }
     else {
       current.classList.remove("selected");
@@ -57,7 +67,7 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
         if (previous == null) {
           previous = this.querySelector("tr:last-child.entity:not(.unconscious)");
           if (previous != null) {
-            previous.classList.add("selected");
+            this.select(previous);
           }
           break;
         }
@@ -65,7 +75,7 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
           previous = previous.previousElementSibling;
         }
         else {
-          previous.classList.add("selected");
+          this.select(previous);
           break;
         }
       }
@@ -82,7 +92,7 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
       current.classList.remove("selected");
     }
     if (next != null) {
-      next.classList.add("selected");
+      this.select(next);
     }
   }
 

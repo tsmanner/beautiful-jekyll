@@ -35,6 +35,13 @@
         Powered by
         <a href="https://beautifuljekyll.com">Beautiful Jekyll</a>
       </p>{% endunless %}
+      {% if site.dnd.enable %}
+        <details>
+          <summary class="theme-by text-muted">{{ site.data.dnd.ogl.head }}</summary>
+          {{ site.data.dnd.ogl.body | markdownify }}
+          <span class="theme-by text-muted">{{ site.data.dnd.ogl.foot | markdownify }}</span>
+        </details>
+      {% endif %}
       </div>
     </div>
   </div>

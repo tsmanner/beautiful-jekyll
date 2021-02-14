@@ -23,3 +23,25 @@
   font-style: italic;
   text-decoration: underline;
 }
+
+.dnd-entity-details.hidden {
+  display: none;
+}
+
+.dnd-entity-details:not(.hidden) {
+  display: initial;
+}
+
+.dnd-entity-details .dnd-entity-name {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.dnd-entity-details .dnd-entity-type {
+  font-style: italic;
+  font-size: small;
+}
+
+.list-lower-alpha {
+  list-style-type: lower-alpha;
+}
