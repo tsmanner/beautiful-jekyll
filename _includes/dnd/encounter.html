@@ -16,7 +16,7 @@
       {% for entity_path in encounter.entities %}
 
       {% assign hierarchy = entity_path | split: "." %}
-        {% assign entity = site.data.dnd %}
+        {% assign entity = site.data %}
         {% for hierarchy_name in hierarchy %}
           {% assign entity = entity[hierarchy_name] %}
         {% endfor %}
@@ -30,7 +30,7 @@
     {% for entity_path in encounter.entities %}
 
     {% assign hierarchy = entity_path | split: "." %}
-      {% assign entity = site.data.dnd %}
+      {% assign entity = site.data %}
       {% for hierarchy_name in hierarchy %}
         {% assign entity = entity[hierarchy_name] %}
       {% endfor %}
