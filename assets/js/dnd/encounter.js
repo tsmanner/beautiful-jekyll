@@ -2,7 +2,7 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
   constructor() {
     super();
     this.initiativeObserver = new MutationObserver(DnD.Encounter.sort);
-    this.initiativeObserver.observe(this, { attributeFilter: [ "data-initiative-check" ], subtree: true });
+    this.initiativeObserver.observe(this, { attributeFilter: [ "data-initiative-roll" ], subtree: true });
     this.sort();
   }
 
@@ -17,13 +17,13 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
     let tbody = this.getElementsByTagName("tbody")[0];
     let rows = this.rows();
     rows.sort(function(lhs, rhs) {
-      if ("initiativeCheck" in lhs.dataset && "initiativeCheck" in rhs.dataset) {
-        return parseInt(rhs.dataset.initiativeCheck) - parseInt(lhs.dataset.initiativeCheck);
+      if ("initiativeRoll" in lhs.dataset && "initiativeRoll" in rhs.dataset) {
+        return parseInt(rhs.dataset.initiativeRoll) - parseInt(lhs.dataset.initiativeRoll);
       }
-      else if ("initiativeCheck" in lhs.dataset) {
+      else if ("initiativeRoll" in lhs.dataset) {
         return -1;
       }
-      else if ("initiativeCheck" in rhs.dataset) {
+      else if ("initiativeRoll" in rhs.dataset) {
         return 1;
       }
       else {

@@ -42,7 +42,7 @@ monsters:
     traits:
       - "Illumination": "The flameskull sheds either dim light in a 15-foot radius, or bright light in a 15-foot radius and dim light for an additional 15 feet. It can switch between the options as an action."
     actions:
-      - Multiattack: The flameskull uses Fire Ray twice.
+      - "Multiattack": The flameskull uses Fire Ray twice.
       - "Fire Ray": "Ranged Spell Attack: +5 to hit, range 30 ft., one target. Hit: 10 (3d6) fire damage."
 
   Gargoyle:
@@ -81,7 +81,7 @@ monsters:
     traits:
       - "False Appearance": "While the gargoyle remains motionless, it is indistinguishable from an inanimate statue."
     actions:
-      - Multiattack: "The gargoyle makes two attacks: one with its bite, and one with its claws."
+      - "Multiattack": "The gargoyle makes two attacks: one with its bite, and one with its claws."
       - "Bite": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit 5 (1d6 + 2) piercing damage."
       - "Claws": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit 5 (1d6 + 2) slashing damage."
 
@@ -256,7 +256,7 @@ monsters:
     size: medium
     type: undead
     alignment: lawful evil
-    challenge-rating: 0.25
+    challenge-rating: 1/4
     proficiency: 2
     str: 10
     dex: 14
@@ -270,21 +270,29 @@ monsters:
     movement:
       walk: 30
     damage-vulnerabilities:
+      - bludgeoning
     damage-resistances:
     damage-immunities:
+      - poison
     condition-immunities:
+      - exhaustion
+      - poisoned
     senses:
+      - darkvision 60 ft.
     languages:
+      - Understands the languages it knew in life, but can't speak
     traits:
     actions:
+      - "Shortsword": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage."
+      - "Shortbow": "Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage."
 
   "Zombie":
     name: Zombie
     link: https://www.dndbeyond.com/monsters/zombie
     size: medium
     type: undead
-    alignment: chaotic evil
-    challenge-rating: 3
+    alignment: neitral evil
+    challenge-rating: 1/4
     proficiency: 2
     str: 13
     dex: 6
@@ -295,23 +303,30 @@ monsters:
     ac: 8
     hp: 22
     bonuses:
+      wis-save: proficiency
     movement:
       walk: 30
     damage-vulnerabilities:
     damage-resistances:
     damage-immunities:
+      - poison
     condition-immunities:
+      - poisoned
     senses:
+      - darkvision 60 ft.
     languages:
+      - Understands the languages it knew in life, but can't speak
     traits:
+      - "Undead Fortitude": "If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead."
     actions:
+      - "Slam": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage."
 
   "Wight":
     name: Wight
     link: https://www.dndbeyond.com/monsters/wight
     size: medium
     type: undead
-    alignment: chaotic evil
+    alignment: neutral evil
     challenge-rating: 3
     proficiency: 2
     str: 15
@@ -323,16 +338,32 @@ monsters:
     ac: 14
     hp: 45
     bonuses:
+      perception: proficiency
+      stealth: proficiency
     movement:
       walk: 30
     damage-vulnerabilities:
     damage-resistances:
+      - necrotic
+      - bludgeoning, piercing, and slashing from non-magical attacks
     damage-immunities:
+      - poison
     condition-immunities:
+      - exhaustion
+      - poisoned
     senses:
+      - darkvision 60 ft.
     languages:
+      - The languages it knew in life
     traits:
+      - "Sunlight Sensitivity": "While in sunlight, the wight has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
     actions:
+      - "Multiattack": "The wight makes two longsword attacks or two longbow attacks. It can use its Life Drain in place of one longsword attack."
+      - "Life Drain": |
+            Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) necrotic damage. The target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.<br>
+            A humanoid slain by this attack rises 24 hours later as a zombie under the wight's control, unless the humanoid is restored to life or its body is destroyed. The wight can have no more than twelve zombies under its control at one time.
+      - "Longsword": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands."
+      - "Longbow": "Ranged Weapon Attack: +4 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage."
 
   entityname:
     name: entityname
