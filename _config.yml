@@ -234,5 +234,4 @@ plugins:
 # OGL D&D Content
 # The contents of the "dnd" key in this config are covered by the OPEN GAME LICENSE Version 1.0a
 
-dnd:
-  enable: true
+enable_dnd: true
