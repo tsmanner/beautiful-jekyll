@@ -1,5 +1,6 @@
-head: OPEN GAME LICENSE Version 1.0a
-body: |2
+<details>
+  <summary class="theme-by text-muted">OPEN GAME LICENSE Version 1.0a</summary>
+  {% capture body %}
   The following text is the property of Wizards of the Coast, Inc. and is Copyright 2000 Wizards of the Coast, Inc ("Wizards"). All Rights Reserved.
 
   1. Definitions:
@@ -44,4 +45,7 @@ body: |2
 
   System Reference Document 5.1 Copyright 2016, Wizards of the Coast, Inc.; Authors Mike Mearls, Jeremy Crawford, Chris Perkins, Rodney Thompson, Peter Lee, James Wyatt, Robert J. Schwalb, Bruce R. Cordell, Chris Sims, and Steve Townshend, based on original material by E. Gary Gygax and Dave Arneson.
 
-foot: END OF LICENSE
+  {% endcapture %}
+  {{ body | markdownify }}
+  <span class="theme-by text-muted">END OF LICENSE</span>
+</details>

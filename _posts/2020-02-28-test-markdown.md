@@ -9,15 +9,15 @@ comments: true
 encounters:
   - name: An Encounter
     entities:
-      - "dnd-ogl.srd.monsters.Flameskull"
-      - "dnd-ogl.srd.monsters.Gargoyle"
-      - "dnd-ogl.srd.monsters.Ghast"
-      - "dnd-ogl.srd.monsters.Ghost"
-      - "dnd-ogl.srd.monsters.Ghoul"
-      - "dnd-ogl.srd.monsters.Green Hag"
-      - "dnd-ogl.srd.monsters.Skeleton"
-      - "dnd-ogl.srd.monsters.Zombie"
-      - "dnd-ogl.srd.monsters.Wight"
+      - "dnd.monsters.Flameskull"
+      - "dnd.monsters.Gargoyle"
+      - "dnd.monsters.Ghast"
+      - "dnd.monsters.Ghost"
+      - "dnd.monsters.Ghoul"
+      - "dnd.monsters.Green Hag"
+      - "dnd.monsters.Skeleton"
+      - "dnd.monsters.Zombie"
+      - "dnd.monsters.Wight"
 ---
 
 This is a demo post to show you how to write blog posts with markdown.  I strongly encourage you to [take 5 minutes to learn how to write in markdown](https://markdowntutorial.com/) - it'll teach you how to transform regular text into bold/italics/headings/tables/etc.
@@ -97,7 +97,7 @@ An Entity Table
 
 <table>
 {% include dnd/entity-table-head.html %}
-{% include dnd/entity-row.html entity=site.data.dnd-ogl.srd.monsters.Gargoyle %}
+{% include dnd/entity-row.html entity=site.dnd.monsters.Gargoyle %}
 </table>
 
 {% include dnd/encounter.html name="An Encounter" %}
