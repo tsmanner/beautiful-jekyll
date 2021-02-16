@@ -1,0 +1,46 @@
+"Player1":
+  name: Player1
+  link: "more/about/Player1"
+  size: medium
+  type: humanoid
+  alignment: chaotic good
+  level: 20
+  proficiency: 8
+  str: 14
+  dex: 20
+  con: 18
+  int: 10
+  wis: 11
+  cha: 8
+  ac: 18
+  hp: 200
+  bonuses:
+    str-save: proficiency
+    dex-save: proficiency
+    stealth:
+      - proficiency
+      - proficiency
+    sleight-of-hand: proficiency
+  movement:
+    walk: 30
+    fly: 60
+    hover:
+    swim:
+    burrow:
+  damage-vulnerabilities:
+  damage-resistances:
+  damage-immunities:
+  condition-immunities:
+    - paralyzed
+    - stunned
+  senses:
+    - Darkvision 60 ft.
+  languages:
+    - Common
+  traits:
+    - "Trait One": "Monster1 has some trait called Trait One that is innate"
+  actions:
+    - "Some Melee Weapon": "Melee Weapon Attack: +X to hit, reach Y ft., Z target(s). Hit N (AdB + C) (type) damage."
+    - "Some Melee Spell": "Melee Spell Attack: +X to hit, reach Y ft., Z target(s). Hit N (AdB + C) (type) damage."
+    - "Some Ranged Weapon": "Ranged Weapon Attack: +X to hit, reach Y ft., Z target(s). Hit N (AdB + C) (type) damage."
+    - "Some Ranged Spell": "Ranged Spell Attack: +X to hit, range Y/3*Y ft., Z target(s). Hit N (AdB + C) (type) damage."

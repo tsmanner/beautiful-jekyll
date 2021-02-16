@@ -1,20 +1,23 @@
 <div class="dnd-entity-name"><a href="{{ include.entity.link }}">{{ include.entity.name }}</a></div>
 <div class="dnd-entity-type">{{ entity.size }} {{ entity.type }}, {{ entity.alignment | default: 'any alignment' }}</div>
+{% if entity.challenge-rating %}<div><b>Challenge Rating </b>{{ entity.challenge-rating }}</div>{% endif %}
+{% if entity.level %}<div><b>Level </b>{{ entity.level }}</div>{% endif %}
 <div class="dnd-entity-movement">
   <b>Speed</b>
   <span class="dnd-movement-walk">{{ include.entity.movement.walk | default: 0 }} ft.</span>
-  {% if include.entity.movement.fly %}<span class="dnd-entity-movement-fly">, fly {{ include.entity.movement.fly | default: 0 }} ft.</span>{% endif %}
-  {% if include.entity.movement.hover %}<span class="dnd-entity-movement-hover">, fly {{ include.entity.movement.hover | default: 0 }} ft. (hover)</span>{% endif %}
-  {% if include.entity.movement.swim %}<span class="dnd-entity-movement-swim">, swim {{ include.entity.movement.swim | default: 0 }} ft.</span>{% endif %}
-  {% if include.entity.movement.burrow %}<span class="dnd-entity-movement-burrow">, burrow {{ include.entity.movement.burrow | default: 0 }} ft.</span>{% endif %}
+  {% if include.entity.movement.fly %}<span class="dnd-entity-movement-fly"> fly {{ include.entity.movement.fly | default: 0 }} ft.</span>{% endif %}
+  {% if include.entity.movement.hover %}<span class="dnd-entity-movement-hover"> fly {{ include.entity.movement.hover | default: 0 }} ft. (hover)</span>{% endif %}
+  {% if include.entity.movement.swim %}<span class="dnd-entity-movement-swim"> swim {{ include.entity.movement.swim | default: 0 }} ft.</span>{% endif %}
+  {% if include.entity.movement.burrow %}<span class="dnd-entity-movement-burrow"> burrow {{ include.entity.movement.burrow | default: 0 }} ft.</span>{% endif %}
 </div>
+<div class="dnd-entity-proficiency"><b>Proficiency </b>+{{ include.entity.proficiency }}</div>
 <div class="dnd-entity-skills">
   <b>Skills</b>
-  {% assign skills = "acrobatics, animal handling, arcana, athletics, deception, history, insight, intimidation, investigation, medicine, nature, perception, performance, persuasion, religion, sleight of hand, stealth, survival" | split: ", " %}
+  {% assign skills = "acrobatics, animal-handling, arcana, athletics, deception, history, insight, intimidation, investigation, medicine, nature, perception, performance, persuasion, religion, sleight-of-hand, stealth, survival" | split: ", " %}
   {% for skill in skills %}
     {% if entity.bonuses[skill] %}
       {% assign ability = site.data.dnd.skills[skill] %}
-      {{ skill | capitalize }}
+      {{ skill | capitalize | replace: "-", " " }}
       {% assign modifier = entity[ability] | minus: 10 | divided_by: 2 | floor %}
       {% for bonus in entity.bonuses[skill] %}
         {% if entity[bonus] %}{% assign modifier = modifier | plus: entity[bonus] %}{% endif %}
@@ -54,17 +57,18 @@
   </div>
 {% endif %}
 {% if entity.traits %}
+  <div>
   {% for trait_hash in entity.traits %}
     {% for trait in trait_hash %}<b>{{ trait[0] }}. </b>{{ trait[1] }}{% endfor %}
     <br>
   {% endfor %}
+  </div>
 {% endif %}
 {% if entity.actions %}
+  <div>
   {% for action_hash in entity.actions %}
     {% for action in action_hash %}<b>{{ action[0] }}. </b>{{ action[1] }}{% endfor %}
     <br>
   {% endfor %}
-{% endif %}
-{% if entity.challenge-rating %}
-  <b>Challenge Rating </b>{{ entity.challenge-rating }}
+  </div>
 {% endif %}
