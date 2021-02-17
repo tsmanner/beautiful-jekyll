@@ -20,7 +20,7 @@
       {{ skill | capitalize | replace: "-", " " }}
       {% assign modifier = entity[ability] | minus: 10 | divided_by: 2 | floor %}
       {% for bonus in entity.bonuses[skill] %}
-        {% if entity[bonus] %}{% assign modifier = modifier | plus: entity[bonus] %}{% endif %}
+        {% if entity[bonus] %}{% assign modifier = modifier | plus: entity[bonus] %}{% else %}{% assign modifier = modifier | plus: bonus %}{% endif %}
       {% endfor %}
       {% if modifier >= 0 %}+{% endif %}{{ modifier }}
     {% endif %}

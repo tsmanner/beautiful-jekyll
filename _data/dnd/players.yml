@@ -20,6 +20,7 @@
     stealth:
       - proficiency
       - proficiency
+      - 5
     sleight-of-hand: proficiency
   movement:
     walk: 30

@@ -19,7 +19,7 @@
   data-wis="{{ include.entity.wis }}"
   data-cha="{{ include.entity.cha }}"
   {% for bonus in include.entity.bonuses %}
-  data-{{ bonus[0] }}-bonuses="{{ bonus[1] }}"
+  data-{{ bonus[0] }}-bonuses="{{ bonus[1] | join: ' ' }}"
   {%- endfor -%}>
   <th>
     <dnd-entity-name class="dnd-entity-link"></dnd-entity-name>

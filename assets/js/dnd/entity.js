@@ -129,8 +129,15 @@ DnD.Entity = class Entity extends HTMLTableRowElement {
     let bonusesName = attribute+"Bonuses";
     let bonus = 0;
     if (bonusesName in this.dataset) {
-      for (let bonusAttr of this.dataset[bonusesName].split(" ")) {
-        bonus += this[bonusAttr];
+      for (let bonusStr of this.dataset[bonusesName].split(" ")) {
+        let parser = new DnD.Parsers.OneOf(/[a-zA-Z_]\w*/, /-?\d+/);
+        let ast = parser.parse(bonusStr);
+        if (ast.children[0].matcher == parser.matchers[1]) {
+          bonus += parseInt(ast.children[0].children[0]);
+        }
+        else {
+          bonus += this[ast.children[0].children[0]];
+        }
       }
     }
     return bonus;
