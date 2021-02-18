@@ -1,0 +1,39 @@
+{% assign encounter_id = include.name | replace: ' ', '_' %}
+{% assign encounter = page.encounters | where: "name", include.name | first %}
+<div>
+  <button onclick="autoRollInitiative('{{ encounter_id }}.table')" >Auto Roll Initiative</button>
+  <button is="dnd-encounter-button" onclick="encounter.selectPrevious()">Previous</button>
+  <button is="dnd-encounter-button" onclick="encounter.selectNext()">Next</button>
+  <button is="dnd-encounter-button" onclick="encounter.setAbilitySuffix('')">Score</button>
+  <button is="dnd-encounter-button" onclick="encounter.setAbilitySuffix('Mod')">Modifier</button>
+  <button is="dnd-encounter-button" onclick="encounter.setAbilitySuffix('Save')">Save</button>
+</div>
+<table class="dnd-encounter-table">
+  {% include dnd/entity-table-head.html %}
+  <tbody>
+    {% for entity_path in encounter.entities %}
+
+    {% assign hierarchy = entity_path | split: "." %}
+      {% assign entity = site.data %}
+      {% for hierarchy_name in hierarchy %}
+        {% assign entity = entity[hierarchy_name] %}
+      {% endfor %}
+
+      {% include dnd/entity-row.html entity=entity entity_prefix=forloop.index entity_path=entity_path %}
+    {% endfor %}
+  </tbody>
+</table>
+<details>
+  <summary>Details</summary>
+  {% for entity_path in encounter.entities %}
+
+  {% assign hierarchy = entity_path | split: "." %}
+    {% assign entity = site.data %}
+    {% for hierarchy_name in hierarchy %}
+      {% assign entity = entity[hierarchy_name] %}
+    {% endfor %}
+    <div class="dnd-entity-details hidden" data-entity-name="{{ entity_path }}">
+      {% include dnd/entity-details.html entity=entity entity_path=entity_path %}
+    </div>
+  {% endfor %}
+</details>

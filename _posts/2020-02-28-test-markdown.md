@@ -93,4 +93,12 @@ An Entity Table
 {% include dnd/entity-row.html entity=site.data.dnd.monsters.Monster1 %}
 </table>
 
+### Encounter
+
 {% include dnd/encounter.html name="An Encounter" %}
+
+### Encounter Piecemeal
+
+{% include dnd/encounter-head.html name="An Encounter" %}
+{% include dnd/encounter-body.html name="An Encounter" %}
+{% include dnd/encounter-foot.html name="An Encounter" %}

@@ -133,3 +133,12 @@ DnD.Encounter = class Encounter extends HTMLDetailsElement {
 }
 customElements.define("dnd-encounter", DnD.Encounter, { extends: "details" });
 
+
+DnD.EncounterButton = class EncounterButton extends HTMLButtonElement {
+  constructor() {
+    super();
+    this.encounter = DnD.Encounter.getEncounter(this);
+  }
+
+}
+customElements.define("dnd-encounter-button", DnD.EncounterButton, { extends: "button" });

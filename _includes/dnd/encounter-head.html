@@ -1,0 +1,4 @@
+{% assign encounter_id = include.name | replace: ' ', '_' %}
+{% assign encounter = page.encounters | where: "name", include.name | first %}
+<details is="dnd-encounter" class="encounter" id="{{ encounter_id }}">
+  <summary>{{ include.name }}</summary>
