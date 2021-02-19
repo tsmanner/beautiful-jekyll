@@ -10,6 +10,19 @@
   background-color: rgba(80, 80, 80, 0.5);
 }
 
+.encounter {
+  display: flex;
+}
+
+.encounter > :not(summary) {
+  margin-left: 2ch;
+}
+
+.encounter > hr {
+  max-width: 100%;
+  width: 100%;
+}
+
 .encounter .entity.selected {
   border: 3px solid gray;
 }

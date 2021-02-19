@@ -101,4 +101,12 @@ An Entity Table
 
 {% include dnd/encounter-head.html name="An Encounter" %}
 {% include dnd/encounter-body.html name="An Encounter" %}
+{% capture text %}
+After this encounter, some other things happen and some loot is available:
+- A pile of gems
+- A _ton_ of gold
+- A magic weapon
+{% endcapture %}{{ text | markdownify }}
 {% include dnd/encounter-foot.html name="An Encounter" %}
+
+The next chapter of the story goes here, but when the encounter is open, it's hard to tell!
