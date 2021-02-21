@@ -105,7 +105,11 @@ An Entity Table
 After this encounter, some other things happen and some loot is available:
 - A pile of gems
 - A _ton_ of gold
-- A magic weapon
+- <span class="uncommon">An uncommon magic weapon</span>
+- <span class="rare">Rare magic armor</span>
+- <span class="very-rare">A very rare ring</span>
+- <span class="legendary">A legendary pendant</span>
+- <span class="artifact">An artifact of great power</span>
 {% endcapture %}{{ text | markdownify }}
 {% include dnd/encounter-foot.html name="An Encounter" %}
 

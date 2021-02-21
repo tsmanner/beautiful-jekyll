@@ -1,0 +1,5 @@
+.uncommon { font-weight: bold; color: green; }
+.rare { font-weight: bold; color: blue; }
+.very-rare { font-weight: bold; color: purple; }
+.legendary { font-weight: bold; color: orange; }
+.artifact { font-weight: bold; color: tan; }
