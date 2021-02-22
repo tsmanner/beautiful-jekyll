@@ -40,7 +40,7 @@
   {% endif %}
 
   {% if site.favicon %}
-  <link rel="shortcut icon" type="image/x-icon" href="{{site.favicon}}">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ site.favicon | relative_url }}">
   {% endif %}
 
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | absolute_url }}">
