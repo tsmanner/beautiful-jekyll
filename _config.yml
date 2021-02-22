@@ -33,6 +33,8 @@ round-avatar: true
 # then specify the following parameter
 #title-img: /path/to/image
 
+# If you want a favicon for the page tab
+# favicon: /assets/img/favicon.ico
 
 # --- Footer social media links --- #
 
