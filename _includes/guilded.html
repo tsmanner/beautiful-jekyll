@@ -1,0 +1,5 @@
+{%- assign type = include.type | default: 'micro' -%}
+{%- if type == 'micro' -%}<iframe src="https://www.guilded.gg/canvas_index.html?route=%2Fcanvas%2Fembed%2Fbadge%2F{{ site.guilded-id }}" width="92" height="32" frameborder="0" scrolling="no"></iframe>
+{%- elsif type == 'small' -%}<iframe src="https://www.guilded.gg/canvas_index.html?route=%2Fcanvas%2Fembed%2Fteamcard%2F{{ site.guilded-id }}" width="268" height="380" frameborder="0" scrolling="no"></iframe>
+{%- elsif type == 'large' -%}<iframe src="https://www.guilded.gg/canvas_index.html?route=%2Fcanvas%2Fembed%2Fteamcard%2F{{ site.guilded-id }}&size=large" width="553" height="262" frameborder="0" scrolling="no"></iframe>
+{%- endif -%}
